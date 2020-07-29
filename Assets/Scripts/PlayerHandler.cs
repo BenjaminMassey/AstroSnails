@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class MethodB : MonoBehaviour
+public class PlayerHandler : MonoBehaviour
 {
     private float run_speed = 45.0f;
     private float turn_speed = 125.0f;
@@ -33,6 +33,8 @@ public class MethodB : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!Globals.running) { return; }
+
         transform.Rotate(/*Input.GetAxis("Vertical") * */Time.deltaTime * run_speed * -1.0f,
                          0.0f,
                          Input.GetAxis("Horizontal") * Time.deltaTime * turn_speed);

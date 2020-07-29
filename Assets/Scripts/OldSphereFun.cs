@@ -4,7 +4,7 @@ using System.Runtime.InteropServices.ComTypes;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MethodA : MonoBehaviour
+public class OldSphereFun : MonoBehaviour
 {
     private float MoveSpeed = 8.0f;
     private bool debug_on = false;
