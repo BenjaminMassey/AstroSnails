@@ -8,8 +8,8 @@ public class PlayerHandler : MonoBehaviour
 {
     private float run_speed = 45.0f;
     private float turn_speed = 125.0f;
-    private float jump_amount = 0.15f;
-    private float fall_speed = 0.25f;
+    private float jump_amount = 0.20f;
+    private float fall_speed = 0.30f;
 
     private bool gravity_on;
     private bool jumpable;
