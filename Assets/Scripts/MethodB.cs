@@ -79,6 +79,22 @@ public class MethodB : MonoBehaviour
             RaiseLowerPlayer(jump_amount / iters);
             yield return new WaitForFixedUpdate();
         }
+        if (Input.GetKey(KeyCode.Space))
+        {
+            StartCoroutine("Fly");
+        }
+        else
+        {
+            gravity_on = true;
+        }
+    }
+
+    IEnumerator Fly()
+    {
+        while (Input.GetKey(KeyCode.Space))
+        {
+            yield return new WaitForFixedUpdate();
+        }
         gravity_on = true;
     }
 
