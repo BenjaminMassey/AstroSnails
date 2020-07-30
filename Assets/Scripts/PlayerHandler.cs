@@ -10,6 +10,11 @@ public class PlayerHandler : MonoBehaviour
     private float turn_speed = 125.0f;
     private float jump_amount = 0.20f;
     private float fall_speed = 0.30f;
+    private float max_fly = 100.0f;
+    private float fly_cost = 1.0f;
+    private float fly_gain = 1.0f;
+
+    private float curr_fly;
 
     private bool gravity_on;
     private bool jumpable;
@@ -24,10 +29,12 @@ public class PlayerHandler : MonoBehaviour
     {
         gravity_on = true;
         jumpable = true;
+        curr_fly = max_fly;
         player = transform.GetChild(0).transform.gameObject;
         player_local_z_start = player.transform.localPosition.z;
         t = GameObject.Find("Text").GetComponent<Text>();
         t.text = "";
+        StartCoroutine("FlyRegen");
     }
 
     // Update is called once per frame
@@ -93,11 +100,30 @@ public class PlayerHandler : MonoBehaviour
 
     IEnumerator Fly()
     {
-        while (Input.GetKey(KeyCode.Space))
+        while (Input.GetKey(KeyCode.Space) && curr_fly > 0.0f)
         {
+            curr_fly -= fly_cost;
             yield return new WaitForFixedUpdate();
         }
         gravity_on = true;
+    }
+
+    IEnumerator FlyRegen()
+    {
+        while (Globals.running)
+        {
+            t.text = curr_fly.ToString();
+            float diff = max_fly - curr_fly;
+            if (diff > 0.0f)
+            {
+                curr_fly += Mathf.Min(diff, fly_gain);
+            }
+            float iters = 50 * 0.1f;
+            for (int i = 0; i < iters; i++)
+            {
+                yield return new WaitForFixedUpdate();
+            }
+        }
     }
 
 }
