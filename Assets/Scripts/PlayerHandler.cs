@@ -23,6 +23,7 @@ public class PlayerHandler : MonoBehaviour
     private float player_local_z_start;
 
     private Text t;
+    private Slider s;
 
     // Start is called before the first frame update
     void Start()
@@ -34,6 +35,7 @@ public class PlayerHandler : MonoBehaviour
         player_local_z_start = player.transform.localPosition.z;
         t = GameObject.Find("Text").GetComponent<Text>();
         t.text = "";
+        s = GameObject.Find("Slider").GetComponent<Slider>();
         StartCoroutine("FlyRegen");
     }
 
@@ -112,7 +114,8 @@ public class PlayerHandler : MonoBehaviour
     {
         while (Globals.running)
         {
-            t.text = curr_fly.ToString();
+            //t.text = curr_fly.ToString();
+            s.value = curr_fly / max_fly;
             float diff = max_fly - curr_fly;
             if (diff > 0.0f)
             {
