@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -13,11 +15,15 @@ public class PlayerHandler : MonoBehaviour
     private float max_fly = 100.0f;
     private float fly_cost = 1.0f;
     private float fly_gain = 1.0f;
+    private float boost_speed = 3.0f;
+    private float boost_time = 1.5f;
+    private float boost_wait = 3.0f;
 
     private float curr_fly;
 
     private bool gravity_on;
     private bool jumpable;
+    private bool boosting;
 
     private GameObject player;
     private float player_local_z_start;
@@ -30,6 +36,7 @@ public class PlayerHandler : MonoBehaviour
     {
         gravity_on = true;
         jumpable = true;
+        boosting = false;
         curr_fly = max_fly;
         player = transform.GetChild(0).transform.gameObject;
         player_local_z_start = player.transform.localPosition.z;
@@ -53,6 +60,11 @@ public class PlayerHandler : MonoBehaviour
         if (jumpable && Input.GetKeyDown(KeyCode.Space))
         {
             StartCoroutine("Jump");
+        }
+
+        if (!boosting && Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            StartCoroutine("Boost");
         }
 
         if (player.transform.localPosition.z > player_local_z_start)
@@ -129,4 +141,36 @@ public class PlayerHandler : MonoBehaviour
         }
     }
 
+    IEnumerator Boost()
+    {
+        boosting = true;
+        t.text = "Boosting!";
+
+        float orig_speed = run_speed;
+        run_speed *= boost_speed;
+
+        float time_iters = 50 * boost_time;
+        for (int i = 0; i < time_iters; i++)
+        {
+            yield return new WaitForFixedUpdate();
+        }
+
+        run_speed = orig_speed;
+        t.text = "Recharging...";
+
+        float wait_iters = 50 * boost_wait;
+        for (int i = 0; i < wait_iters; i++)
+        {
+            yield return new WaitForFixedUpdate();
+        }
+
+        t.text = "READY";
+
+        for (int i = 0; i < 10; i++) { yield return new WaitForFixedUpdate(); }
+
+        t.text = "";
+
+        boosting = false;
+        
+    }
 }
