@@ -29,7 +29,8 @@ public class PlayerHandler : MonoBehaviour
     private float player_local_z_start;
 
     private Text t;
-    private Slider s;
+    private Slider fly_slider;
+    private Text boost_text;
 
     // Start is called before the first frame update
     void Start()
@@ -42,7 +43,9 @@ public class PlayerHandler : MonoBehaviour
         player_local_z_start = player.transform.localPosition.z;
         t = GameObject.Find("Text").GetComponent<Text>();
         t.text = "";
-        s = GameObject.Find("Slider").GetComponent<Slider>();
+        fly_slider = GameObject.Find("FlySlider").GetComponent<Slider>();
+        boost_text = GameObject.Find("BoostText").GetComponent<Text>();
+        boost_text.text = "READY";
         StartCoroutine("FlyRegen");
     }
 
@@ -127,7 +130,7 @@ public class PlayerHandler : MonoBehaviour
         while (Globals.running)
         {
             //t.text = curr_fly.ToString();
-            s.value = curr_fly / max_fly;
+            fly_slider.value = curr_fly / max_fly;
             float diff = max_fly - curr_fly;
             if (diff > 0.0f)
             {
@@ -144,7 +147,7 @@ public class PlayerHandler : MonoBehaviour
     IEnumerator Boost()
     {
         boosting = true;
-        t.text = "Boosting!";
+        boost_text.text = "Boosting!";
 
         float orig_speed = run_speed;
         run_speed *= boost_speed;
@@ -156,7 +159,7 @@ public class PlayerHandler : MonoBehaviour
         }
 
         run_speed = orig_speed;
-        t.text = "Recharging...";
+        boost_text.text = "Recharging...";
 
         float wait_iters = 50 * boost_wait;
         for (int i = 0; i < wait_iters; i++)
@@ -164,11 +167,7 @@ public class PlayerHandler : MonoBehaviour
             yield return new WaitForFixedUpdate();
         }
 
-        t.text = "READY";
-
-        for (int i = 0; i < 10; i++) { yield return new WaitForFixedUpdate(); }
-
-        t.text = "";
+        boost_text.text = "READY";
 
         boosting = false;
         
