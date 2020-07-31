@@ -5,7 +5,10 @@ using UnityEngine;
 
 public class ColliderHandler : MonoBehaviour
 {
-    private GameObject[] players;
+    public GameObject[] players;
+
+    public int data_iter;
+    public bool first_time;
 
     private Vector3 size;
 
@@ -15,36 +18,47 @@ public class ColliderHandler : MonoBehaviour
     void Start()
     {
         GetPlayers();
+        data_iter = 0;
+        first_time = true;
         size = new Vector3(0.5f, 0.5f, 0.5f);
         StartCoroutine("Colliderer");
     }
     
     IEnumerator Colliderer()
     {
-        int wait_iter = 15;
-        for (int i = 0; i < wait_iter; i++)
+        while (true)
         {
-            yield return new WaitForFixedUpdate();
-        }
-
-        int data_iter = 0;
-        while (Globals.running)
-        {
-            for (int i = 0; i < players.Length; i++)
+            if (Globals.running)
             {
-                
-                BoxCollider collider = gameObject.AddComponent<BoxCollider>();
-                collider.size = size;
-                collider.center = players[i].GetComponent<PositionCache>().data[data_iter];
-                collider.isTrigger = true;
-            }
+                if (first_time)
+                {
+                    int wait_iter = 15;
+                    for (int i = 0; i < wait_iter; i++)
+                    {
+                        yield return new WaitForFixedUpdate();
+                    }
+                    first_time = false;
+                }
+                for (int i = 0; i < players.Length; i++)
+                {
 
-            float iters = 50 * Globals.collider_time;
-            for (int i = 0; i < iters; i++)
+                    BoxCollider collider = gameObject.AddComponent<BoxCollider>();
+                    collider.size = size;
+                    collider.center = players[i].GetComponent<PositionCache>().data[data_iter];
+                    collider.isTrigger = true;
+                }
+
+                float iters = 50 * Globals.collider_time;
+                for (int i = 0; i < iters; i++)
+                {
+                    yield return new WaitForFixedUpdate();
+                }
+                data_iter++;
+            }
+            else
             {
                 yield return new WaitForFixedUpdate();
             }
-            data_iter++;
         }
     }
 

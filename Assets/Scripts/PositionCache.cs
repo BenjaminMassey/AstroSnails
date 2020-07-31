@@ -14,12 +14,19 @@ public class PositionCache : MonoBehaviour
 
     IEnumerator Cacher()
     {
-        while (Globals.running)
+        while (true)
         {
-            data.Add(transform.position);
+            if (Globals.running)
+            {
+                data.Add(transform.position);
 
-            float iter = 50 * Globals.collider_time;
-            for (int i = 0; i < iter; i++)
+                float iter = 50 * Globals.collider_time;
+                for (int i = 0; i < iter; i++)
+                {
+                    yield return new WaitForFixedUpdate();
+                }
+            }
+            else
             {
                 yield return new WaitForFixedUpdate();
             }

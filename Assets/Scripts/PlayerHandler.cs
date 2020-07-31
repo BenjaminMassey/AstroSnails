@@ -10,6 +10,9 @@ using ExitGames.Client.Photon;
 
 public class PlayerHandler : MonoBehaviourPun
 {
+    public float player_local_z_start;
+    public Quaternion start_rot;
+
     private float run_speed = 45.0f;
     private float turn_speed = 125.0f;
     private float jump_amount = 0.20f;
@@ -28,7 +31,7 @@ public class PlayerHandler : MonoBehaviourPun
     private bool boosting;
 
     private GameObject player;
-    private float player_local_z_start;
+    
 
     private Text t;
     private Slider fly_slider;
@@ -48,6 +51,7 @@ public class PlayerHandler : MonoBehaviourPun
         fly_slider = GameObject.Find("FlySlider").GetComponent<Slider>();
         boost_text = GameObject.Find("BoostText").GetComponent<Text>();
         boost_text.text = "READY";
+        start_rot = transform.localRotation;
         StartCoroutine("FlyRegen");
     }
 
@@ -193,5 +197,10 @@ public class PlayerHandler : MonoBehaviourPun
 
         boosting = false;
         
+    }
+
+    public void ResetFly()
+    {
+        curr_fly = max_fly;
     }
 }

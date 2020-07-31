@@ -3,29 +3,42 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Photon.Pun;
 
 public class Death : MonoBehaviour
 {
-    /*
+    private int num_dead;
+    private void Start()
+    {
+        num_dead = 0;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log("TRIGGER ENTER: " + other.gameObject.name);
         
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-        if (players.Length - 1 == 0)
+        if (/*players.Length - 1 == 0*/ num_dead == players.Length - 1)
         {
-            StartCoroutine("Finish");
+            foreach (GameObject player in players)
+            {
+                player.GetComponent<Death>().StartCoroutine("Finish");
+            }
         }
         else
         {
             GameObject.Find("Colliders").GetComponent<ColliderHandler>().GetPlayers();
 
-            Destroy(gameObject);
+            transform.parent.GetComponent<PlayerHandler>().enabled = false;
+
+            num_dead++;
+            //Destroy(gameObject);
         }
     }
 
     IEnumerator Finish()
     {
+        
         GameObject final_player = GameObject.FindGameObjectWithTag("Player");
 
         GameObject.Find("Text").GetComponent<Text>().text = "Finished!\nWinner: " + final_player.name;
@@ -39,9 +52,17 @@ public class Death : MonoBehaviour
             yield return new WaitForFixedUpdate();
         }
 
-        Globals.running = true;
+        //GameObject.Find("GameSetup").GetComponent<Resetter>().Reset();
 
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        SceneManager.LoadScene(2);
+        /*
+        PhotonNetwork.AutomaticallySyncScene = true;
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.LoadLevel(2);
+        }
+        */
     }
-    */
+    
 }

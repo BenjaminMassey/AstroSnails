@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Game.unity
     guid: fafdf2392a6bed44e92d7c93ae78af42
+  - enabled: 1
+    path: Assets/Scenes/Dummy.unity
+    guid: e3bddb7435434334c9c4d8aedf5bcc91
   m_configObjects: {}
