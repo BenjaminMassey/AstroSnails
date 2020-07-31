@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/AstroBears.unity
+    path: Assets/Scenes/Lobby.unity
+    guid: 93cca68ee6f9b694bb56ec4c64fbd1e0
+  - enabled: 1
+    path: Assets/Scenes/Game.unity
     guid: fafdf2392a6bed44e92d7c93ae78af42
   m_configObjects: {}

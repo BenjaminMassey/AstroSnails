@@ -5,8 +5,10 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Photon.Pun;
+using ExitGames.Client.Photon;
 
-public class PlayerHandler : MonoBehaviour
+public class PlayerHandler : MonoBehaviourPun
 {
     private float run_speed = 45.0f;
     private float turn_speed = 125.0f;
@@ -52,6 +54,15 @@ public class PlayerHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        /*
+        if (!photonView.gameObject.transform.GetChild(0).name.Equals(player.name))
+        {
+            return;
+        }
+        */
+
+        if (!photonView.IsMine) { return; }
+
         if (!Globals.running) { return; }
 
         transform.Rotate(/*Input.GetAxis("Vertical") * */Time.deltaTime * run_speed * -1.0f,
@@ -127,19 +138,30 @@ public class PlayerHandler : MonoBehaviour
 
     IEnumerator FlyRegen()
     {
-        while (Globals.running)
+        while (true)
         {
-            //t.text = curr_fly.ToString();
-            fly_slider.value = curr_fly / max_fly;
-            float diff = max_fly - curr_fly;
-            if (diff > 0.0f)
+            if (Globals.running)
             {
-                curr_fly += Mathf.Min(diff, fly_gain);
+                fly_slider.value = curr_fly / max_fly;
+
+                float diff = max_fly - curr_fly;
+                if (diff > 0.0f)
+                {
+                    curr_fly += Mathf.Min(diff, fly_gain);
+                }
+                float iters = 50 * 0.1f;
+                for (int i = 0; i < iters; i++)
+                {
+                    yield return new WaitForFixedUpdate();
+                }
             }
-            float iters = 50 * 0.1f;
-            for (int i = 0; i < iters; i++)
+            else
             {
-                yield return new WaitForFixedUpdate();
+                int check_time = 25;
+                for (int i = 0; i < check_time; i++)
+                {
+                    yield return new WaitForFixedUpdate();
+                }
             }
         }
     }

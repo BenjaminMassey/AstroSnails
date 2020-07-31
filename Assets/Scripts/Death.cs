@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class Death : MonoBehaviour
 {
+    /*
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log("TRIGGER ENTER: " + other.gameObject.name);
@@ -42,4 +43,5 @@ public class Death : MonoBehaviour
 
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
+    */
 }
