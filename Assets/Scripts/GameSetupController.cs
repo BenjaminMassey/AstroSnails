@@ -11,19 +11,6 @@ public class GameSetupController : MonoBehaviourPunCallbacks
     
     void Start()
     {
-        /*
-        // Fix for loading in with only one player (need a reload)
-        if (!Globals.first_start)
-        {
-            int player_count = GameObject.FindGameObjectsWithTag("Player").Length;
-            Debug.Log("See " + player_count + " players in the scene");
-            if (player_count == 1)
-            {
-                PhotonNetwork.LoadLevel(2);
-            }
-        }
-        */
-
         CreatePlayer();
 
         // FIX ROTATION, CLEAR TRAILS

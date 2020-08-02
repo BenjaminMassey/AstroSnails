@@ -38,6 +38,18 @@ public class StartButton : MonoBehaviour
     }
     public void Press()
     {
+        /* Doesn't fix :(
+        // Fix for loading in with only one player (need a reload)
+        if (PhotonNetwork.IsMasterClient && !Globals.first_start && PhotonNetwork.CurrentRoom.PlayerCount > 1)
+        {
+            int player_count = GameObject.FindGameObjectsWithTag("Player").Length;
+            Debug.Log("See " + player_count + " players in the scene");
+            if (player_count == 1)
+            {
+                PhotonNetwork.LoadLevel(2);
+            }
+        }
+        */
 
         ColliderHandler ch = GameObject.Find("Colliders").GetComponent<ColliderHandler>();
         ch.GetPlayers();

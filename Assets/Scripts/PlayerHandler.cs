@@ -54,13 +54,13 @@ public class PlayerHandler : MonoBehaviourPun
         //t = GameObject.Find("Text").GetComponent<Text>();
         //t.text = "";
         //fly_slider = GameObject.Find("FlySlider").GetComponent<Slider>();
-        Transform fly_slider_obj = transform.Find("FlySlider");
+        Transform fly_slider_obj = transform.Find("Canvas").Find("FlySlider");
         if (fly_slider_obj != null)
         {
             fly_slider = fly_slider_obj.GetComponent<Slider>();
         }
         //boost_text = GameObject.Find("BoostText").GetComponent<Text>();
-        Transform boost_text_obj = transform.Find("BoostText");
+        Transform boost_text_obj = transform.Find("Canvas").Find("BoostText");
         if (boost_text_obj != null)
         {
             boost_text = boost_text_obj.GetComponent<Text>();
@@ -74,6 +74,15 @@ public class PlayerHandler : MonoBehaviourPun
         if (!photonView.IsMine)
         {
             transform.Find("Canvas").gameObject.SetActive(false);
+        }
+        else
+        {
+            if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey("player_num"))
+            {
+                int playerNum = (int)PhotonNetwork.LocalPlayer.CustomProperties["player_num"];
+                player.name = "Player " + playerNum;
+                name = "Player " + playerNum + " Container";
+            }
         }
     }
 
@@ -235,6 +244,9 @@ public class PlayerHandler : MonoBehaviourPun
     IEnumerator Boost()
     {
         boosting = true;
+
+        Globals.collider_time = 0.05f;
+
         if (boost_text != null)
         {
             boost_text.text = "Boosting!";
@@ -266,6 +278,8 @@ public class PlayerHandler : MonoBehaviourPun
         {
             boost_text.text = "READY";
         }
+
+        Globals.collider_time = 0.1f;
 
         boosting = false;
         

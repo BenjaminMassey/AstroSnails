@@ -12,6 +12,7 @@ public class GlobalHandler : MonoBehaviourPun
 
     void Start()
     {
+        Globals.collider_time = 0.1f;
         /*
         if (PhotonNetwork.IsMasterClient)
         {
