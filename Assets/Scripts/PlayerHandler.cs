@@ -36,7 +36,7 @@ public class PlayerHandler : MonoBehaviourPun
 
     private GameObject player;
 
-    private Text t;
+    //private Text t;
     private Slider fly_slider;
     private Text boost_text;
     private TrailRenderer trail;
@@ -51,8 +51,8 @@ public class PlayerHandler : MonoBehaviourPun
         curr_fly = max_fly;
         player = transform.GetChild(0).transform.gameObject;
         player_local_z_start = player.transform.localPosition.z;
-        t = GameObject.Find("Text").GetComponent<Text>();
-        t.text = "";
+        //t = GameObject.Find("Text").GetComponent<Text>();
+        //t.text = "";
         fly_slider = GameObject.Find("FlySlider").GetComponent<Slider>();
         boost_text = GameObject.Find("BoostText").GetComponent<Text>();
         boost_text.text = "READY";
@@ -99,6 +99,9 @@ public class PlayerHandler : MonoBehaviourPun
                 properties.Add("player_num", playerNum);
 
                 PhotonNetwork.LocalPlayer.SetCustomProperties(properties);
+
+                player.name = "Player " + playerNum;
+                name = "Player " + playerNum + " Container";
 
                 Debug.Log("Assigned player num: " + playerNum);
             }

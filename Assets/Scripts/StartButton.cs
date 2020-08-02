@@ -27,6 +27,15 @@ public class StartButton : MonoBehaviour
     {
         GameObject.Find("Colliders").GetComponent<ColliderHandler>().GetPlayers();
         Globals.running = true;
+        Globals.first_start = false;
+
+        // Work around for bug that trails aren't clear
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        foreach (GameObject player in players)
+        {
+            player.GetComponent<TrailRenderer>().Clear();
+        }
+
         Destroy(gameObject);
     }
 }

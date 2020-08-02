@@ -65,4 +65,5 @@ public static class Globals
 {
     public static bool running = false;
     public static float collider_time = 0.1f;
+    public static bool first_start = true;
 }
