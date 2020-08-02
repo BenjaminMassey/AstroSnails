@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using UnityEngine.UI;
+using Photon.Realtime;
 
 public class StartButton : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class StartButton : MonoBehaviour
     {
         if (!PhotonNetwork.IsMasterClient)
         {
+            GetComponent<Button>().interactable = false;
             transform.GetChild(0).GetComponent<Text>().text = "Waiting...";
             StartCoroutine("CheckStarted");
         }
@@ -31,11 +33,17 @@ public class StartButton : MonoBehaviour
         {
             yield return new WaitForFixedUpdate();
         }
+        Press();
         Destroy(gameObject);
     }
     public void Press()
     {
-        GameObject.Find("Colliders").GetComponent<ColliderHandler>().GetPlayers();
+
+        ColliderHandler ch = GameObject.Find("Colliders").GetComponent<ColliderHandler>();
+        ch.GetPlayers();
+        ch.Clear();
+        ch.data_iter = 0;
+        
         Globals.running = true;
         Globals.first_start = false;
 

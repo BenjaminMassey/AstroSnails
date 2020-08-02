@@ -65,6 +65,24 @@ public class ColliderHandler : MonoBehaviour
         }
     }
 
+    public void Clear()
+    {
+        int max_iters = 50;
+        int iter = 0;
+        BoxCollider[] boxes = GetComponents<BoxCollider>();
+        do
+        {
+            if (iter == max_iters) { break; }
+            foreach (BoxCollider box in boxes)
+            {
+                Destroy(box);
+            }
+            boxes = GetComponents<BoxCollider>();
+            iter++;
+
+        } while (boxes.Length > 0);
+    }
+
     public void GetPlayers()
     {
         players = GameObject.FindGameObjectsWithTag("Player");

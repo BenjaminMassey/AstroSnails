@@ -11,16 +11,18 @@ public class GameSetupController : MonoBehaviourPunCallbacks
     
     void Start()
     {
+        /*
         // Fix for loading in with only one player (need a reload)
-        if (PhotonNetwork.IsMasterClient && !Globals.first_start)
+        if (!Globals.first_start)
         {
-            GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-            Debug.Log("See " + players.Length + " players in the scene");
-            if (players.Length == 1)
+            int player_count = GameObject.FindGameObjectsWithTag("Player").Length;
+            Debug.Log("See " + player_count + " players in the scene");
+            if (player_count == 1)
             {
                 PhotonNetwork.LoadLevel(2);
             }
         }
+        */
 
         CreatePlayer();
 
