@@ -56,7 +56,7 @@ public class GlobalHandler : MonoBehaviourPun
         }
         if (!PhotonNetwork.IsMasterClient)
         {
-            t.text = Globals.running.ToString();
+            //t.text = Globals.running.ToString();
         }
     }
 }

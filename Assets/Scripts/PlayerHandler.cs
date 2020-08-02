@@ -53,13 +53,28 @@ public class PlayerHandler : MonoBehaviourPun
         player_local_z_start = player.transform.localPosition.z;
         //t = GameObject.Find("Text").GetComponent<Text>();
         //t.text = "";
-        fly_slider = GameObject.Find("FlySlider").GetComponent<Slider>();
-        boost_text = GameObject.Find("BoostText").GetComponent<Text>();
-        boost_text.text = "READY";
+        //fly_slider = GameObject.Find("FlySlider").GetComponent<Slider>();
+        Transform fly_slider_obj = transform.Find("FlySlider");
+        if (fly_slider_obj != null)
+        {
+            fly_slider = fly_slider_obj.GetComponent<Slider>();
+        }
+        //boost_text = GameObject.Find("BoostText").GetComponent<Text>();
+        Transform boost_text_obj = transform.Find("BoostText");
+        if (boost_text_obj != null)
+        {
+            boost_text = boost_text_obj.GetComponent<Text>();
+            boost_text.text = "READY";
+        }
         trail = transform.GetChild(0).GetComponent<TrailRenderer>();
         // SHOUDL BE SET BY GAMESETUP start_rot = Vector3.zero;
         //start_rot = transform.localRotation;
         StartCoroutine("FlyRegen");
+
+        if (!photonView.IsMine)
+        {
+            transform.Find("Canvas").gameObject.SetActive(false);
+        }
     }
 
     // Update is called once per frame
@@ -107,7 +122,7 @@ public class PlayerHandler : MonoBehaviourPun
             }
             /*transform.rotation = Quaternion.identity;
             transform.Rotate(start_rot);*/
-            trail.Clear();
+            //trail.Clear();
             //transform.rotation.eulerAngles.Set(start_rot.x, start_rot.y, start_rot.z);
             return;
         }
@@ -190,7 +205,10 @@ public class PlayerHandler : MonoBehaviourPun
         {
             if (Globals.running)
             {
-                fly_slider.value = curr_fly / max_fly;
+                if (fly_slider != null)
+                {
+                    fly_slider.value = curr_fly / max_fly;
+                }
 
                 float diff = max_fly - curr_fly;
                 if (diff > 0.0f)
@@ -217,7 +235,10 @@ public class PlayerHandler : MonoBehaviourPun
     IEnumerator Boost()
     {
         boosting = true;
-        boost_text.text = "Boosting!";
+        if (boost_text != null)
+        {
+            boost_text.text = "Boosting!";
+        }
 
         float orig_speed = run_speed;
         run_speed *= boost_speed;
@@ -229,7 +250,11 @@ public class PlayerHandler : MonoBehaviourPun
         }
 
         run_speed = orig_speed;
-        boost_text.text = "Recharging...";
+
+        if (boost_text != null)
+        {
+            boost_text.text = "Recharging...";
+        }
 
         float wait_iters = 50 * boost_wait;
         for (int i = 0; i < wait_iters; i++)
@@ -237,7 +262,10 @@ public class PlayerHandler : MonoBehaviourPun
             yield return new WaitForFixedUpdate();
         }
 
-        boost_text.text = "READY";
+        if (boost_text != null)
+        {
+            boost_text.text = "READY";
+        }
 
         boosting = false;
         

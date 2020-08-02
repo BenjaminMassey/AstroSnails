@@ -15,6 +15,16 @@ public class StartButton : MonoBehaviour
         }
     }
 
+    private void FixedUpdate()
+    {
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+
+        for (int i = 0; i < players.Length; i++)
+        {
+            players[i].GetComponent<TrailRenderer>().Clear();
+        }
+    }
+
     IEnumerator CheckStarted()
     {
         while (!Globals.running)
