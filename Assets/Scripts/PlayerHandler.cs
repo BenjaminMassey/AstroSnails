@@ -7,11 +7,13 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Photon.Pun;
 using ExitGames.Client.Photon;
+using System.Linq;
 
 public class PlayerHandler : MonoBehaviourPun
 {
     public float player_local_z_start;
-    public Quaternion start_rot;
+    //public Quaternion start_rot;
+    public Vector3 start_rot;
 
     private float run_speed = 45.0f;
     private float turn_speed = 125.0f;
@@ -30,12 +32,14 @@ public class PlayerHandler : MonoBehaviourPun
     private bool jumpable;
     private bool boosting;
 
+    private bool rot_set;
+
     private GameObject player;
-    
 
     private Text t;
     private Slider fly_slider;
     private Text boost_text;
+    private TrailRenderer trail;
 
     // Start is called before the first frame update
     void Start()
@@ -43,6 +47,7 @@ public class PlayerHandler : MonoBehaviourPun
         gravity_on = true;
         jumpable = true;
         boosting = false;
+        rot_set = false;
         curr_fly = max_fly;
         player = transform.GetChild(0).transform.gameObject;
         player_local_z_start = player.transform.localPosition.z;
@@ -51,7 +56,9 @@ public class PlayerHandler : MonoBehaviourPun
         fly_slider = GameObject.Find("FlySlider").GetComponent<Slider>();
         boost_text = GameObject.Find("BoostText").GetComponent<Text>();
         boost_text.text = "READY";
-        start_rot = transform.localRotation;
+        trail = transform.GetChild(0).GetComponent<TrailRenderer>();
+        // SHOUDL BE SET BY GAMESETUP start_rot = Vector3.zero;
+        //start_rot = transform.localRotation;
         StartCoroutine("FlyRegen");
     }
 
@@ -67,7 +74,41 @@ public class PlayerHandler : MonoBehaviourPun
 
         if (!photonView.IsMine) { return; }
 
-        if (!Globals.running) { return; }
+        if (!Globals.running) 
+        {
+            if (rot_set) { return; }
+            if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey("player_num"))
+            {
+                float[] spots = new float[] { 0.0f, 90.0f, 180.0f, 270.0f };
+                int index = (int) PhotonNetwork.LocalPlayer.CustomProperties["player_num"] - 1;
+                float my_y = spots[index];
+                transform.rotation = Quaternion.identity;
+                transform.Rotate(new Vector3(0.0f, my_y, 0.0f));
+                //transform.rotation.eulerAngles.Set(0.0f, my_y, 0.0f);
+            }
+            else
+            {
+                int playerNum = PhotonNetwork.CurrentRoom.PlayerCount;
+                ExitGames.Client.Photon.Hashtable properties =
+                        new ExitGames.Client.Photon.Hashtable();/*
+                        { 
+                            { "running", false },
+                            { "player_num", (int) PhotonNetwork.CurrentRoom.PlayerCount }
+                        };*/
+                properties.Add("running", false);
+                properties.Add("player_num", playerNum);
+
+                PhotonNetwork.LocalPlayer.SetCustomProperties(properties);
+
+                Debug.Log("Assigned player num: " + playerNum);
+            }
+            /*transform.rotation = Quaternion.identity;
+            transform.Rotate(start_rot);*/
+            trail.Clear();
+            //transform.rotation.eulerAngles.Set(start_rot.x, start_rot.y, start_rot.z);
+            return;
+        }
+        rot_set = true;
 
         transform.Rotate(/*Input.GetAxis("Vertical") * */Time.deltaTime * run_speed * -1.0f,
                          0.0f,

@@ -30,7 +30,7 @@ public class QuickStartLobbyController : MonoBehaviourPunCallbacks
 
     void CreateRoom()
     {
-        int randomRoomNumber = Random.Range(0, 50);
+        int randomRoomNumber = Random.Range(1, 6);
         string roomName = "Room " + randomRoomNumber.ToString();
         Debug.Log("Attempting to create room \"" + roomName + "\"");
         RoomOptions roomOps = new RoomOptions() 

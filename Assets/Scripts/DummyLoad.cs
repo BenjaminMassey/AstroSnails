@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 public class DummyLoad : MonoBehaviour
 {
     // Start is called before the first frame update
-    void Start()
+    void OnLevelWasLoaded()//Start()
     {
         PhotonNetwork.AutomaticallySyncScene = true;
 

@@ -171,7 +171,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player_local_z_start: 0
-  start_rot: {x: 0, y: 0, z: 0, w: 0}
+  start_rot: {x: 0, y: 0, z: 0}
 --- !u!114 &2053484129280481134
 MonoBehaviour:
   m_ObjectHideFlags: 0

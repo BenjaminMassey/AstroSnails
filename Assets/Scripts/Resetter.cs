@@ -18,7 +18,8 @@ public class Resetter : MonoBehaviour
         for (int i = 0; i < players.Length; i++)
         {
             PlayerHandler ph = containers[i].GetComponent<PlayerHandler>();
-            containers[i].transform.rotation = ph.start_rot;
+            if (!ph.photonView.IsMine) { continue; }
+            //containers[i].transform.rotation = ph.start_rot;
             players[i].transform.localPosition = new Vector3(0.0f, 0.0f, ph.player_local_z_start);
             players[i].GetComponent<TrailRenderer>().Clear();
             players[i].GetComponent<PositionCache>().data.Clear();
@@ -47,5 +48,7 @@ public class Resetter : MonoBehaviour
         ch.data_iter = 0;
 
         GameObject.Find("Text").GetComponent<Text>().text = "";
+
+        //Globals.running = true;
     }
 }

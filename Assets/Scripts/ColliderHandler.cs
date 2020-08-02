@@ -41,11 +41,14 @@ public class ColliderHandler : MonoBehaviour
                 }
                 for (int i = 0; i < players.Length; i++)
                 {
-
-                    BoxCollider collider = gameObject.AddComponent<BoxCollider>();
-                    collider.size = size;
-                    collider.center = players[i].GetComponent<PositionCache>().data[data_iter];
-                    collider.isTrigger = true;
+                    List<Vector3> points = players[i].GetComponent<PositionCache>().data;
+                    if (data_iter < points.Count)
+                    {
+                        BoxCollider collider = gameObject.AddComponent<BoxCollider>();
+                        collider.size = size;
+                        collider.center = points[data_iter];
+                        collider.isTrigger = true;
+                    }
                 }
 
                 float iters = 50 * Globals.collider_time;
