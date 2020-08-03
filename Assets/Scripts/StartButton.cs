@@ -20,6 +20,15 @@ public class StartButton : MonoBehaviour
             StartCoroutine("CheckStarted");
         }
     }
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space) && 
+            PhotonNetwork.IsMasterClient && 
+            GetComponent<Button>().interactable)
+        {
+            Press();
+        }
+    }
 
     private void FixedUpdate()
     {

@@ -73,7 +73,8 @@ public class PlayerHandler : MonoBehaviourPun
 
         if (!photonView.IsMine)
         {
-            transform.Find("Canvas").gameObject.SetActive(false);
+            //transform.Find("Canvas").gameObject.SetActive(false);
+            Destroy(transform.Find("Canvas").gameObject);
         }
         else
         {

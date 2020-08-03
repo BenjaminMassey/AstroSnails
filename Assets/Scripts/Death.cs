@@ -4,10 +4,13 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Photon.Pun;
+using Photon.Pun.Demo.Cockpit.Forms;
 
 public class Death : MonoBehaviourPunCallbacks
 {
     private int num_dead;
+
+    private bool isDead;
 
     public override void OnEnable()
     {
@@ -22,6 +25,7 @@ public class Death : MonoBehaviourPunCallbacks
     private void Start()
     {
         num_dead = 0;
+        isDead = false;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -49,6 +53,8 @@ public class Death : MonoBehaviourPunCallbacks
 
             transform.parent.GetComponent<PlayerHandler>().enabled = false;
 
+            isDead = true;
+
             num_dead++;
             //Destroy(gameObject);
         }
@@ -57,9 +63,25 @@ public class Death : MonoBehaviourPunCallbacks
     IEnumerator Finish()
     {
 
-        GameObject final_player = GameObject.FindGameObjectWithTag("Player");
-
-        GameObject.Find("Text").GetComponent<Text>().text = "Finished!\nWinner: " + final_player.name;
+        //GameObject final_player = GameObject.FindGameObjectWithTag("Player");
+        //GameObject.Find("Text").GetComponent<Text>().text = "Finished!\nWinner: " + final_player.name;
+        GameObject winner = null;
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        foreach (GameObject player in players)
+        {
+            if (!player.GetComponent<Death>().isDead)
+            {
+                winner = player;
+            }
+        }
+        if (winner != null)
+        {
+            GameObject.Find("Text").GetComponent<Text>().text = "Finished!\nWinner: " + winner.name;
+        }
+        else
+        {
+            Debug.Log("Couldn't find winner");
+        }
 
         Globals.running = false;
         //final_player.transform.parent.GetComponent<PlayerHandler>().enabled = false;
