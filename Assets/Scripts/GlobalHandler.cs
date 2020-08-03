@@ -53,7 +53,14 @@ public class GlobalHandler : MonoBehaviourPun
         }
         else
         {
-            Globals.running = (bool) PhotonNetwork.MasterClient.CustomProperties["running"];
+            if (PhotonNetwork.MasterClient.CustomProperties.ContainsKey("running"))
+            {
+                Globals.running = (bool)PhotonNetwork.MasterClient.CustomProperties["running"];
+            }
+            else
+            {
+                Debug.Log("GlobalHandler.cs does not see 'running' in Master's properties: bad");
+            }
         }
         if (!PhotonNetwork.IsMasterClient)
         {

@@ -9,7 +9,11 @@ public class StartButton : MonoBehaviour
 {
     private void Start()
     {
-        if (!PhotonNetwork.IsMasterClient)
+        if (PhotonNetwork.IsMasterClient)
+        {
+            StartCoroutine("DelayedInteractible");
+        }
+        else
         {
             GetComponent<Button>().interactable = false;
             transform.GetChild(0).GetComponent<Text>().text = "Waiting...";
@@ -25,6 +29,18 @@ public class StartButton : MonoBehaviour
         {
             players[i].GetComponent<TrailRenderer>().Clear();
         }
+    }
+
+    IEnumerator DelayedInteractible()
+    {
+        GetComponent<Button>().interactable = false;
+        transform.GetChild(0).GetComponent<Text>().text = "Loading...";
+        for (int i = 0; i < 50; i++)
+        {
+            yield return new WaitForFixedUpdate();
+        }
+        GetComponent<Button>().interactable = true;
+        transform.GetChild(0).GetComponent<Text>().text = "START";
     }
 
     IEnumerator CheckStarted()
