@@ -25,12 +25,14 @@ public class PlayerHandler : MonoBehaviourPun
     private float boost_speed = 3.0f;
     private float boost_time = 1.5f;
     private float boost_wait = 3.0f;
+    private float jump_buffer_percent = 0.1f; // can toggle a jump for last 10% of prev jump
 
     private float curr_fly;
 
     private bool gravity_on;
     private bool jumpable;
     private bool boosting;
+    private bool jump_buffer;
 
     private bool rot_set;
 
@@ -47,6 +49,7 @@ public class PlayerHandler : MonoBehaviourPun
         gravity_on = true;
         jumpable = true;
         boosting = false;
+        jump_buffer = false;
         rot_set = false;
         curr_fly = max_fly;
         player = transform.GetChild(0).transform.gameObject;
@@ -144,8 +147,9 @@ public class PlayerHandler : MonoBehaviourPun
 
         //t.text = player.transform.localPosition.ToString();
 
-        if (jumpable && Input.GetKeyDown(KeyCode.Space))
+        if (jumpable && (Input.GetKeyDown(KeyCode.Space) || jump_buffer))
         {
+            jump_buffer = false;
             StartCoroutine("Jump");
         }
 
@@ -154,11 +158,17 @@ public class PlayerHandler : MonoBehaviourPun
             StartCoroutine("Boost");
         }
 
-        if (player.transform.localPosition.z > player_local_z_start)
+        float z_diff = player.transform.localPosition.z - player_local_z_start;
+        if (z_diff > 0.0f)
         {
             if (gravity_on)
             {
                 RaiseLowerPlayer(-1.0f * fall_speed * Time.deltaTime);
+                if (Input.GetKeyDown(KeyCode.Space) && z_diff < (player_local_z_start * jump_buffer_percent))
+                {
+                    jump_buffer = true;
+                    // Put jump buffer stuff here
+                }
             }
         }
         else
