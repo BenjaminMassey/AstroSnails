@@ -81,11 +81,21 @@ public class PlayerHandler : MonoBehaviourPun
         }
         else
         {
-            if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey("player_num"))
+            ExitGames.Client.Photon.Hashtable properties = 
+                PhotonNetwork.LocalPlayer.CustomProperties;
+            if (properties.ContainsKey("player_name"))
             {
-                int playerNum = (int)PhotonNetwork.LocalPlayer.CustomProperties["player_num"];
-                player.name = "Player " + playerNum;
-                name = "Player " + playerNum + " Container";
+                player.name = (string)properties["player_name"];
+                name = ((string)properties["player_name"]) + " Container";
+            }
+            else
+            {
+                if (properties.ContainsKey("player_num"))
+                {
+                    int playerNum = (int)PhotonNetwork.LocalPlayer.CustomProperties["player_num"];
+                    player.name = "Player " + playerNum;
+                    name = "Player " + playerNum + " Container";
+                }
             }
         }
     }
@@ -118,18 +128,26 @@ public class PlayerHandler : MonoBehaviourPun
             {
                 int playerNum = PhotonNetwork.CurrentRoom.PlayerCount;
                 ExitGames.Client.Photon.Hashtable properties =
-                        new ExitGames.Client.Photon.Hashtable();/*
-                        { 
-                            { "running", false },
-                            { "player_num", (int) PhotonNetwork.CurrentRoom.PlayerCount }
-                        };*/
-                properties.Add("running", false);
+                        PhotonNetwork.LocalPlayer.CustomProperties;
+
+                if (!properties.ContainsKey("running"))
+                {
+                    properties.Add("running", false);
+                } 
                 properties.Add("player_num", playerNum);
 
                 PhotonNetwork.LocalPlayer.SetCustomProperties(properties);
 
-                player.name = "Player " + playerNum;
-                name = "Player " + playerNum + " Container";
+                if (properties.ContainsKey("player_name"))
+                {
+                    player.name = (string)properties["player_name"];
+                    name = ((string)properties["player_name"]) + " Container";
+                }
+                else 
+                {
+                    player.name = "Player " + playerNum;
+                    name = "Player " + playerNum + " Container";
+                }
 
                 Debug.Log("Assigned player num: " + playerNum);
             }

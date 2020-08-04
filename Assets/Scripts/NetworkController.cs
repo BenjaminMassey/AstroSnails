@@ -19,6 +19,12 @@ public class NetworkController : MonoBehaviourPunCallbacks
     public override void OnConnectedToMaster()
     {
         Debug.Log("Connected to the " + PhotonNetwork.CloudRegion + " server!");
+
+        string name = GameObject.Find("NameInput").transform.Find("Text").GetComponent<Text>().text;
+        ExitGames.Client.Photon.Hashtable properties =
+                PhotonNetwork.LocalPlayer.CustomProperties;
+        properties.Add("player_name", name);
+        PhotonNetwork.LocalPlayer.SetCustomProperties(properties);//
     }
 
     // Update is called once per frame

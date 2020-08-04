@@ -5,12 +5,13 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Pun.Demo.Cockpit.Forms;
+using Photon.Realtime;
+using System.Linq;
+using ExitGames.Client.Photon;
 
 public class Death : MonoBehaviourPunCallbacks
 {
     private int num_dead;
-
-    private bool isDead;
 
     public override void OnEnable()
     {
@@ -25,27 +26,38 @@ public class Death : MonoBehaviourPunCallbacks
     private void Start()
     {
         num_dead = 0;
-        isDead = false;
+        if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey("dead"))
+        {
+            PhotonNetwork.LocalPlayer.CustomProperties["dead"] = false;
+        }
+        else
+        {
+            PhotonNetwork.LocalPlayer.CustomProperties.Add("dead", false);
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("TRIGGER ENTER: " + other.gameObject.name);
+        //Debug.Log("TRIGGER ENTER: " + other.gameObject.name);
 
         if (!Globals.running) { return; }
-        
-        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-        if (/*players.Length - 1 == 0*/ num_dead == players.Length - 1)
-        {
-            transform.parent.GetComponent<PlayerHandler>().enabled = false;
 
-            StartCoroutine("Finish");
-            /*
-            foreach (GameObject player in players)
+        if (gameObject.GetPhotonView().IsMine)
+        {
+            if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey("dead"))
             {
-                player.GetComponent<Death>().StartCoroutine("Finish");
+                PhotonNetwork.LocalPlayer.CustomProperties["dead"] = true;
             }
-            */
+            else
+            {
+                PhotonNetwork.LocalPlayer.CustomProperties.Add("dead", true);
+            }
+        }
+
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        if (num_dead == players.Length - 1)
+        {
+            StartCoroutine("Finish");
         }
         else
         {
@@ -53,30 +65,32 @@ public class Death : MonoBehaviourPunCallbacks
 
             transform.parent.GetComponent<PlayerHandler>().enabled = false;
 
-            isDead = true;
-
             num_dead++;
-            //Destroy(gameObject);
         }
     }
 
     IEnumerator Finish()
     {
-
-        //GameObject final_player = GameObject.FindGameObjectWithTag("Player");
-        //GameObject.Find("Text").GetComponent<Text>().text = "Finished!\nWinner: " + final_player.name;
-        GameObject winner = null;
-        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-        foreach (GameObject player in players)
+        Debug.Log("Level finish");
+        
+        Player winner = null;
+        Player[] players = PhotonNetwork.CurrentRoom.Players.Values.ToArray();
+        foreach (Player p in players)
         {
-            if (!player.GetComponent<Death>().isDead)
+            if (p.CustomProperties.ContainsKey("dead") &&
+                !(bool)p.CustomProperties["dead"])
             {
-                winner = player;
+                winner = p;
             }
         }
         if (winner != null)
         {
-            GameObject.Find("Text").GetComponent<Text>().text = "Finished!\nWinner: " + winner.name;
+            if (winner.CustomProperties.ContainsKey("player_name"))
+            {
+                GameObject.Find("Text").GetComponent<Text>().text =
+                    "Finished!\nWinner: " + winner.CustomProperties["player_name"];
+                Debug.Log("Finished!\nWinner: " + winner.CustomProperties["player_name"]);
+            }
         }
         else
         {

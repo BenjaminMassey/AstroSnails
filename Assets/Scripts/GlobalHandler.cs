@@ -22,10 +22,14 @@ public class GlobalHandler : MonoBehaviourPun
         }
         */
 
+
         ExitGames.Client.Photon.Hashtable properties =
-                new ExitGames.Client.Photon.Hashtable();
-        properties.Add("running", false);
-        PhotonNetwork.LocalPlayer.SetCustomProperties(properties);
+                PhotonNetwork.LocalPlayer.CustomProperties;
+        if (!properties.ContainsKey("running"))
+        {
+            properties.Add("running", false);
+            PhotonNetwork.LocalPlayer.SetCustomProperties(properties);
+        }
 
         t = GameObject.Find("FlyText").GetComponent<Text>();
     }
@@ -44,9 +48,10 @@ public class GlobalHandler : MonoBehaviourPun
                         new ExitGames.Client.Photon.Hashtable() { { "running", Globals.running }, { "player_num", 0 } };
                     */
                     ExitGames.Client.Photon.Hashtable properties =
-                        new ExitGames.Client.Photon.Hashtable();
-                    properties.Add("running", Globals.running);
-                    properties.Add("player_num", 1);
+                        PhotonNetwork.MasterClient.CustomProperties;
+                    //properties.Add("running", Globals.running);
+                    properties["running"] = Globals.running;
+                    //properties.Add("player_num", 1);
                     PhotonNetwork.MasterClient.SetCustomProperties(properties);
                 }
             }
