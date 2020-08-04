@@ -32,13 +32,14 @@ public class ColliderHandler : MonoBehaviour
             {
                 if (first_time)
                 {
-                    int wait_iter = 15;
+                    int wait_iter = 25; // default 15
                     for (int i = 0; i < wait_iter; i++)
                     {
                         yield return new WaitForFixedUpdate();
                     }
                     first_time = false;
                 }
+                bool failure = false;
                 for (int i = 0; i < players.Length; i++)
                 {
                     List<Vector3> points = players[i].GetComponent<PositionCache>().data;
@@ -56,6 +57,9 @@ public class ColliderHandler : MonoBehaviour
                 {
                     yield return new WaitForFixedUpdate();
                 }
+
+                if (failure) { continue; }
+
                 data_iter++;
             }
             else
