@@ -5,8 +5,10 @@ using Photon.Pun;
 using UnityEngine.UI;
 using Photon.Realtime;
 
-public class StartButton : MonoBehaviour
+public class StartButton : MonoBehaviourPunCallbacks
 {
+    public override void OnEnable() { PhotonNetwork.AddCallbackTarget(this); }
+    public override void OnDisable() { PhotonNetwork.RemoveCallbackTarget(this); }
     private void Start()
     {
         if (PhotonNetwork.IsMasterClient)
@@ -40,16 +42,26 @@ public class StartButton : MonoBehaviour
         }
     }
 
+    public override void OnPlayerEnteredRoom(Player p)
+    {
+        base.OnPlayerEnteredRoom(p);
+        StopCoroutine("DelayedInteractible");
+        StartCoroutine("DelayedInteractible");
+    }
+
     IEnumerator DelayedInteractible()
     {
-        GetComponent<Button>().interactable = false;
-        transform.GetChild(0).GetComponent<Text>().text = "Loading...";
-        for (int i = 0; i < 50; i++)
+        if (PhotonNetwork.IsMasterClient)
         {
-            yield return new WaitForFixedUpdate();
+            GetComponent<Button>().interactable = false;
+            transform.GetChild(0).GetComponent<Text>().text = "Loading...";
+            for (int i = 0; i < 50; i++)
+            {
+                yield return new WaitForFixedUpdate();
+            }
+            GetComponent<Button>().interactable = true;
+            transform.GetChild(0).GetComponent<Text>().text = "START";
         }
-        GetComponent<Button>().interactable = true;
-        transform.GetChild(0).GetComponent<Text>().text = "START";
     }
 
     IEnumerator CheckStarted()

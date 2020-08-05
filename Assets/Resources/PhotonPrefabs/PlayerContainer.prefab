@@ -639,7 +639,6 @@ GameObject:
   - component: {fileID: 7802963470337971727}
   - component: {fileID: 5212542163283666493}
   - component: {fileID: 5954875206248950598}
-  - component: {fileID: 6579646358061246938}
   - component: {fileID: 1503980768388782312}
   m_Layer: 5
   m_Name: ServerInfo
@@ -713,18 +712,6 @@ MonoBehaviour:
     Room: xxxxxx
 
     Ping:'
---- !u!114 &6579646358061246938
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2592931161307151664}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd2cfed4802f99e4bae8c818017c217d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1503980768388782312
 MonoBehaviour:
   m_ObjectHideFlags: 0
