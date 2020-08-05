@@ -193,11 +193,6 @@ public class PlayerHandler : MonoBehaviourPun
         {
             jumpable = true;
         }
-
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        }
     }
 
     void RaiseLowerPlayer(float amount)

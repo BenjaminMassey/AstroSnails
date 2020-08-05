@@ -93,6 +93,11 @@ public class FinishHandler : MonoBehaviourPunCallbacks
 
         if (winner != null)
         {
+            Leaderboard lb = GameObject.Find("Leaderboard").GetComponent<Leaderboard>();
+            lb.RefreshBoard();
+            Globals.win_data[(string)winner.CustomProperties["player_name"]]++;
+            lb.RefreshBoard();
+
             if (winner.CustomProperties.ContainsKey("player_name"))
             {
                 GameObject.Find("Text").GetComponent<Text>().text =
