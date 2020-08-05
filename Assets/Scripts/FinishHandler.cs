@@ -4,6 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.UI;
+using System;
 
 public class FinishHandler : MonoBehaviourPunCallbacks
 {
@@ -43,7 +44,10 @@ public class FinishHandler : MonoBehaviourPunCallbacks
         */
         while (true)
         {
-            int count = PhotonNetwork.CurrentRoom.PlayerCount;
+            int count = 0;
+            try { count = PhotonNetwork.CurrentRoom.PlayerCount; }
+            catch (Exception e) {}
+            
             if (count > 1)
             {
                 if (num_dead >= count - 1) { break; }

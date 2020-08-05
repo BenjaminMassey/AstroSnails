@@ -43,7 +43,6 @@ public class Leaderboard : MonoBehaviourPunCallbacks
 
     public void RefreshBoard()
     {
-        //Player[] players = PhotonNetwork.CurrentRoom.Players.Values.ToArray();
         Player[] players = PhotonNetwork.PlayerList;
         string[] pnames = new string[players.Length];
 
@@ -58,12 +57,13 @@ public class Leaderboard : MonoBehaviourPunCallbacks
         }
 
         string[] names = Globals.win_data.Keys.ToArray<string>();
-
-        foreach (string n in names)
+        //List<int> ignores = new List<int>();
+        for (int i = 0; i < names.Length; i++)
         {
-            if (!pnames.Contains(n))
+            if (!pnames.Contains(names[i]))
             {
-                Globals.win_data.Remove(n);
+                //ignores.Add(i);
+                Globals.win_data.Remove(names[i]);
                 names = Globals.win_data.Keys.ToArray<string>();
             }
         }
@@ -73,6 +73,7 @@ public class Leaderboard : MonoBehaviourPunCallbacks
         string content = "";
         for (int i = 0; i < Globals.win_data.Count; i++)
         {
+            //if (ignores.Contains(i)) { continue; }
             content += names[i] + ": " + score[i];
             if (i != Globals.win_data.Count - 1) { content += "\n"; }
         }

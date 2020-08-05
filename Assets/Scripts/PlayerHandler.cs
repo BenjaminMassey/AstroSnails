@@ -11,6 +11,9 @@ using System.Linq;
 
 public class PlayerHandler : MonoBehaviourPun
 {
+    [SerializeField]
+    private Material[] materials;
+
     public float player_local_z_start;
     //public Quaternion start_rot;
     public Vector3 start_rot;
@@ -98,6 +101,32 @@ public class PlayerHandler : MonoBehaviourPun
                 }
             }
         }
+
+        StartCoroutine("SetVisual");
+    }
+
+    IEnumerator SetVisual()
+    {
+        bool done = false;
+        while (!done)
+        {
+            if (photonView.Owner.CustomProperties.ContainsKey("player_num"))
+            {
+                int index = (int)photonView.Owner.CustomProperties["player_num"] - 1;
+                if (materials.Length >= 4)
+                {
+                    GameObject model = player.transform.Find("ModelContainer").Find("Model").gameObject;
+                    model.GetComponent<MeshRenderer>().material = materials[index];
+                    trail.material = materials[index];
+                }
+                done = true;
+            }
+            else
+            {
+                yield return new WaitForFixedUpdate();
+            }
+        }
+        Debug.Log("Player visual has been set");
     }
 
     // Update is called once per frame
