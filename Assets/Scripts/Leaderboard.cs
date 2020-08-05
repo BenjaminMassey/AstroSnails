@@ -45,18 +45,31 @@ public class Leaderboard : MonoBehaviourPunCallbacks
     {
         //Player[] players = PhotonNetwork.CurrentRoom.Players.Values.ToArray();
         Player[] players = PhotonNetwork.PlayerList;
+        string[] pnames = new string[players.Length];
 
         for (int i = 0; i < players.Length; i++)
         {
-            string name = (string)players[i].CustomProperties["player_name"];
-            if (!Globals.win_data.ContainsKey(name))
+            string pname = (string)players[i].CustomProperties["player_name"];
+            if (!Globals.win_data.ContainsKey(pname))
             {
-                Globals.win_data.Add(name, 0);
+                Globals.win_data.Add(pname, 0);
             }
+            pnames[i] = pname;
         }
 
         string[] names = Globals.win_data.Keys.ToArray<string>();
+
+        foreach (string n in names)
+        {
+            if (!pnames.Contains(n))
+            {
+                Globals.win_data.Remove(n);
+                names = Globals.win_data.Keys.ToArray<string>();
+            }
+        }
+
         int[] score = Globals.win_data.Values.ToArray<int>();
+
         string content = "";
         for (int i = 0; i < Globals.win_data.Count; i++)
         {
