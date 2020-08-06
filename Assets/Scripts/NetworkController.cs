@@ -6,6 +6,9 @@ using UnityEngine.UI;
 
 public class NetworkController : MonoBehaviourPunCallbacks
 {
+    [SerializeField]
+    private GameObject name_input_text;
+
     public void StartConnect()
     {
         if (!PhotonNetwork.IsConnected)
@@ -20,7 +23,7 @@ public class NetworkController : MonoBehaviourPunCallbacks
     {
         Debug.Log("Connected to the " + PhotonNetwork.CloudRegion + " server!");
 
-        string name = GameObject.Find("NameInput").transform.Find("Text").GetComponent<Text>().text;
+        string name = name_input_text.GetComponent<Text>().text;
         ExitGames.Client.Photon.Hashtable properties =
                 PhotonNetwork.LocalPlayer.CustomProperties;
         properties.Add("player_name", name);
