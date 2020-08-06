@@ -24,6 +24,12 @@ public class RoomJoiner : MonoBehaviourPunCallbacks
         PhotonNetwork.JoinRoom(name);
     }
 
+    public void RefreshRooms()
+    {
+        PhotonNetwork.LeaveLobby();
+        PhotonNetwork.JoinLobby();
+    }
+
     public override void OnJoinRoomFailed(short returnCode, string message)
     {
         base.OnJoinRoomFailed(returnCode, message);
@@ -38,5 +44,6 @@ public class RoomJoiner : MonoBehaviourPunCallbacks
         {
             t.text = orig_text;
         }
+        RefreshRooms();
     }
 }

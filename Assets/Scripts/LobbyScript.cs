@@ -23,32 +23,34 @@ public class LobbyScript : MonoBehaviourPunCallbacks
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
         base.OnRoomListUpdate(roomList);
+
+        Debug.Log("See " + roomList.Count + " available rooms");
+
         GameObject content = GameObject.Find("Content");
-        Rect cr = content.GetComponent<RectTransform>().rect;
-        content.GetComponent<RectTransform>().rect.Set(cr.x, cr.y, cr.width, roomList.Count * 100);
+        float csx = content.GetComponent<RectTransform>().sizeDelta.x;
+        content.GetComponent<RectTransform>().sizeDelta = new Vector2(csx, Mathf.Max(600, roomList.Count * 100));
 
-        GameObject scroll_button = GameObject.Find("ScrollButton1");
+        
+        GameObject base_button = GameObject.Find("BaseButton");
+        base_button.GetComponent<Image>().enabled = true;
 
-        if (roomList.Count == 0)
-        {
-            scroll_button.GetComponent<Image>().enabled = false;
-            return;
-        }
-        scroll_button.GetComponent<Image>().enabled = true;
+        List<GameObject> buttons = new List<GameObject>();
 
         int y = 200;
         for (int i = 0; i < roomList.Count; i++)
         {
-            Rect br = scroll_button.GetComponent<RectTransform>().rect;
-            scroll_button.GetComponent<RectTransform>().rect.Set(br.x, br.y, br.width, y);
-            scroll_button.transform.GetChild(0).GetComponent<Text>().text = roomList[i].Name;
-            if (i != roomList.Count - 1)
-            {
-                scroll_button = Instantiate(scroll_button);
-                scroll_button.name = "ScrollButton" + (i + 2);
-            }
+            buttons.Add(Instantiate(base_button));
+            buttons[i].name = "ScrollButton" + (i + 1);
+            buttons[i].transform.parent = GameObject.Find("Content").transform;
+            buttons[i].transform.position = base_button.transform.position;
+            buttons[i].transform.localScale = base_button.transform.localScale;
+            buttons[i].GetComponent<RectTransform>().anchoredPosition = new Vector2(8.5f, y);
+                //.rect.Set(br.x, y, br.width, br.height);
+            buttons[i].transform.GetChild(0).GetComponent<Text>().text = roomList[i].Name;
+
             y -= 100;
         }
-        
+
+        base_button.GetComponent<Image>().enabled = false;
     }
 }
