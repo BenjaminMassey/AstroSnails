@@ -31,9 +31,10 @@ public class LobbyScript : MonoBehaviourPunCallbacks
 
         if (roomList.Count == 0)
         {
-            Destroy(scroll_button);
+            scroll_button.GetComponent<Image>().enabled = false;
             return;
         }
+        scroll_button.GetComponent<Image>().enabled = true;
 
         int y = 200;
         for (int i = 0; i < roomList.Count; i++)
