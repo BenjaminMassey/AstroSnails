@@ -4323,6 +4323,10 @@ MonoBehaviour:
   - {fileID: 2100000, guid: a30967a44e8e69640b1ff7886d55c71b, type: 2}
   player_local_z_start: 0
   start_rot: {x: 0, y: 0, z: 0}
+  run_speed: 45
+  turn_speed: 125
+  max_fly: 100
+  fly_gain: 1
 --- !u!114 &2053484129280481134
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5601,12 +5605,12 @@ GameObject:
   - component: {fileID: 5778985332380571980}
   - component: {fileID: 5635075814247601534}
   m_Layer: 5
-  m_Name: Image
+  m_Name: DEBUG_BG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3166020219928188751
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5867,6 +5871,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: ModelContainer
       objectReference: {fileID: 0}
+    - target: {fileID: 2534866581884222612, guid: 36142d0d39a00294c9add0fcf89b15ac,
+        type: 3}
+      propertyPath: m_Name
+      value: Model
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 36142d0d39a00294c9add0fcf89b15ac,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -5942,11 +5951,6 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 470114c3b3b88c74cb1e3be0f109c2ba, type: 2}
-    - target: {fileID: 2534866581884222612, guid: 36142d0d39a00294c9add0fcf89b15ac,
-        type: 3}
-      propertyPath: m_Name
-      value: Model
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 36142d0d39a00294c9add0fcf89b15ac, type: 3}
 --- !u!4 &8229390945130398155 stripped

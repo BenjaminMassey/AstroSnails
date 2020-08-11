@@ -18,13 +18,14 @@ public class PlayerHandler : MonoBehaviourPun
     //public Quaternion start_rot;
     public Vector3 start_rot;
 
-    private float run_speed = 45.0f;
-    private float turn_speed = 125.0f;
+    // public ones are for Customization.cs
+    public float run_speed; // 45
+    public float turn_speed; // 125
     private float jump_amount = 0.20f;
     private float fall_speed = 0.30f;
-    private float max_fly = 100.0f;
+    public float max_fly; // 100
     private float fly_cost = 1.0f;
-    private float fly_gain = 1.0f;
+    public float fly_gain; // 1
     private float boost_speed = 3.0f;
     private float boost_time = 1.5f;
     private float boost_wait = 3.0f;
@@ -49,6 +50,18 @@ public class PlayerHandler : MonoBehaviourPun
     // Start is called before the first frame update
     void Start()
     {
+        run_speed = 20.0f;
+        turn_speed = 75.0f;
+        max_fly = 65.0f;
+        fly_gain = 1.0f;
+        if (Globals.customization_points != null)
+        { 
+            run_speed += (Globals.speed_amount * Globals.customization_points["speed"]);
+            turn_speed += (Globals.turn_amount * Globals.customization_points["turn"]);
+            max_fly += (Globals.cap_amount * Globals.customization_points["cap"]);
+            fly_gain += (Globals.speed_amount * Globals.customization_points["regen"]);
+        }
+
         gravity_on = true;
         jumpable = true;
         boosting = false;

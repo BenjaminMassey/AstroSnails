@@ -103,6 +103,8 @@ public class StartButton : MonoBehaviourPunCallbacks
             player.GetComponent<TrailRenderer>().Clear();
         }
 
+        GameObject.Find("CharCustom").SetActive(false);
+
         Destroy(gameObject);
     }
 }
