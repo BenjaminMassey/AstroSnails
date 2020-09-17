@@ -9,6 +9,7 @@ public class StartButton : MonoBehaviourPunCallbacks
 {
     public override void OnEnable() { PhotonNetwork.AddCallbackTarget(this); }
     public override void OnDisable() { PhotonNetwork.RemoveCallbackTarget(this); }
+
     private void Start()
     {
         if (PhotonNetwork.IsMasterClient)
@@ -47,6 +48,16 @@ public class StartButton : MonoBehaviourPunCallbacks
         base.OnPlayerEnteredRoom(p);
         StopCoroutine("DelayedInteractible");
         StartCoroutine("DelayedInteractible");
+    }
+
+    public override void OnMasterClientSwitched(Player newMasterClient)
+    {
+        base.OnMasterClientSwitched(newMasterClient);
+        if (PhotonNetwork.IsMasterClient)
+        {
+            StopCoroutine("CheckStarted");
+            StartCoroutine("DelayedInteractible");
+        }
     }
 
     IEnumerator DelayedInteractible()
