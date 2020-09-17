@@ -18,12 +18,24 @@ public class FinishHandler : MonoBehaviourPunCallbacks
     // Start is called before the first frame update
     void Start()
     {
-        if (PhotonNetwork.MasterClient.CustomProperties.ContainsKey("FINISH"))
+        if (PhotonNetwork.MasterClient.CustomProperties.ContainsKey("winner_found"))
         {
-            PhotonNetwork.MasterClient.CustomProperties["FINISH"] = null;
-            PhotonNetwork.MasterClient.CustomProperties.Remove("FINISH");
+            PhotonNetwork.MasterClient.CustomProperties["winner_found"] = false;
         }
-        
+        else
+        {
+            PhotonNetwork.MasterClient.CustomProperties.Add("winner_found", false);
+        }
+
+        if (PhotonNetwork.MasterClient.CustomProperties.ContainsKey("winner"))
+        {
+            PhotonNetwork.MasterClient.CustomProperties["winner"] = null;
+        }
+        else
+        {
+            PhotonNetwork.MasterClient.CustomProperties.Add("winner", null);
+        }
+
         num_dead = 0;
         graveyard = new List<GameObject>();
         StartCoroutine("Checker");
@@ -31,23 +43,12 @@ public class FinishHandler : MonoBehaviourPunCallbacks
 
     IEnumerator Checker()
     {
-        /*
-        while (!Globals.running) { yield return new WaitForFixedUpdate(); }
-
-        for (int i = 0; i < 75; i++) { yield return new WaitForFixedUpdate(); }
-
-        if (PhotonNetwork.MasterClient.CustomProperties.ContainsKey("FINISH"))
-        {
-            PhotonNetwork.MasterClient.CustomProperties["FINISH"] = null;
-            PhotonNetwork.MasterClient.CustomProperties.Remove("FINISH");
-        }
-        */
         while (true)
         {
             int count = 0;
             try { count = PhotonNetwork.CurrentRoom.PlayerCount; }
-            catch (Exception e) {}
-            
+            catch (Exception e) { }
+
             if (count > 1)
             {
                 if (num_dead >= count - 1) { break; }
@@ -56,16 +57,26 @@ public class FinishHandler : MonoBehaviourPunCallbacks
             {
                 if (num_dead == 1) { break; }
             }
-            if (PhotonNetwork.MasterClient.CustomProperties.ContainsKey("FINISH") &&
-                PhotonNetwork.MasterClient.CustomProperties["FINISH"] != null)
-                { Debug.Log("FUCK ABORT ABORT"); break; }
+            if (PhotonNetwork.MasterClient.CustomProperties.ContainsKey("winner_found") &&
+                (bool)PhotonNetwork.MasterClient.CustomProperties["winner_found"])
+            {
+                Debug.Log("Host found winner: abort");
+                break;
+            }
             yield return new WaitForFixedUpdate();
         }
 
-        StartCoroutine("Finish");
+        if (PhotonNetwork.IsMasterClient)
+        {
+            StartCoroutine("HostFinish");
+        }
+        else
+        {
+            StartCoroutine("GuestFinish");
+        }
     }
 
-    IEnumerator Finish()
+    IEnumerator HostFinish()
     {
 
         Debug.Log("Level finish");
@@ -79,21 +90,9 @@ public class FinishHandler : MonoBehaviourPunCallbacks
                 winner = player.GetPhotonView().Owner;
             }
         }
-        if (PhotonNetwork.IsMasterClient)
-        {
-            PhotonNetwork.MasterClient.CustomProperties.Add("FINISH", winner);
-        }
-        else
-        {
-            if (PhotonNetwork.MasterClient.CustomProperties.ContainsKey("FINISH"))
-            {
-                winner = (Player)PhotonNetwork.MasterClient.CustomProperties["FINISH"];
-            }
-            else
-            {
-                PhotonNetwork.MasterClient.CustomProperties.Add("FINISH", winner);
-            }
-        }
+
+        PhotonNetwork.MasterClient.CustomProperties["winner_found"] = true;
+        PhotonNetwork.MasterClient.CustomProperties["winner"] = winner;
 
         if (winner != null)
         {
@@ -123,18 +122,47 @@ public class FinishHandler : MonoBehaviourPunCallbacks
             yield return new WaitForFixedUpdate();
         }
 
-        if (PhotonNetwork.MasterClient.CustomProperties.ContainsKey("FINISH"))
-        {
-            PhotonNetwork.MasterClient.CustomProperties["FINISH"] = null;
-            PhotonNetwork.MasterClient.CustomProperties.Remove("FINISH");
-        }
-
         PhotonNetwork.AutomaticallySyncScene = true;
 
-        if (PhotonNetwork.IsMasterClient)
-        {
-            PhotonNetwork.LoadLevel(2);
-        }
+        PhotonNetwork.LoadLevel(2);
 
     }
+
+    IEnumerator GuestFinish()
+    {
+
+        Debug.Log("Level finish");
+
+        bool winner_found = false;
+        while (!winner_found)
+        {
+            winner_found = (bool)PhotonNetwork.MasterClient.CustomProperties["winner_found"];
+            yield return new WaitForFixedUpdate();
+        }
+
+        Player winner = (Player)PhotonNetwork.MasterClient.CustomProperties["winner"];
+
+        if (winner != null)
+        {
+            Leaderboard lb = GameObject.Find("Leaderboard").GetComponent<Leaderboard>();
+            lb.RefreshBoard();
+            Globals.win_data[(string)winner.CustomProperties["player_name"]]++;
+            lb.RefreshBoard();
+
+            if (winner.CustomProperties.ContainsKey("player_name"))
+            {
+                GameObject.Find("Text").GetComponent<Text>().text =
+                    "Finished!\nWinner: " + winner.CustomProperties["player_name"];
+                Debug.Log("Finished!\nWinner: " + winner.CustomProperties["player_name"]);
+            }
+        }
+        else
+        {
+            GameObject.Find("Text").GetComponent<Text>().text = "Tie!";
+            Debug.Log("Couldn't find winner");
+        }
+
+        Globals.running = false;
+    }
+
 }

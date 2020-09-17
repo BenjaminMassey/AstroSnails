@@ -72,6 +72,21 @@ public class GlobalHandler : MonoBehaviourPun
             //t.text = Globals.running.ToString();
         }
     }
+
+    IEnumerator LessFrequentUpdate()
+    {
+        float time = 1.0f; // seconds
+        while (true)
+        {
+            
+
+            for (int _ = 0; _ < 50 * time; _++)
+            {
+                yield return new WaitForFixedUpdate();
+            }
+        }
+    }
+
 }
 
 public static class Globals
