@@ -82,8 +82,8 @@ public static class Globals
     public static Dictionary<string, int> win_data = new Dictionary<string, int>();
     public static Dictionary<string, int> customization_points = null;
     public static int points_left = 10;
-    public static float speed_amount = 15.0f;
-    public static float turn_amount = 35.0f;
+    public static float speed_amount = 7.0f;
+    public static float turn_amount = 28.0f;
     public static float cap_amount = 25.0f;
-    public static float regen_amount = 0.2f;
+    public static float regen_amount = 0.3f;
 }

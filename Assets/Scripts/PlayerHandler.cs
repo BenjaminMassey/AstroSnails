@@ -50,10 +50,12 @@ public class PlayerHandler : MonoBehaviourPun
     // Start is called before the first frame update
     void Start()
     {
-        run_speed = 20.0f;
-        turn_speed = 75.0f;
-        max_fly = 65.0f;
+        // Customizible trait starting values
+        run_speed = 40.0f;
+        turn_speed = 60.0f;
+        max_fly = 50.0f;
         fly_gain = 1.0f;
+
         if (Globals.customization_points != null)
         { 
             run_speed += (Globals.speed_amount * Globals.customization_points["speed"]);
@@ -193,6 +195,8 @@ public class PlayerHandler : MonoBehaviourPun
 
                 Debug.Log("Assigned player num: " + playerNum);
             }
+            curr_fly = max_fly; // put here as well so gets reset based on customization
+
             /*transform.rotation = Quaternion.identity;
             transform.Rotate(start_rot);*/
             //trail.Clear();
@@ -286,7 +290,7 @@ public class PlayerHandler : MonoBehaviourPun
                 }
 
                 float diff = max_fly - curr_fly;
-                if (diff > 0.0f)
+                if (diff > 0.0f && gravity_on) // && gravity_on means not recharging while flying
                 {
                     curr_fly += Mathf.Min(diff, fly_gain);
                 }
