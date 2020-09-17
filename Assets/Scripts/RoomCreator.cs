@@ -4,15 +4,36 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.UI;
+using System;
 
 public class RoomCreator : MonoBehaviourPunCallbacks
 {
     [SerializeField]
-    private GameObject input_field_text_obj;
+    private GameObject name_input_field_text_obj;
+    [SerializeField]
+    private GameObject size_input_field_text_obj;
 
     public void CreateRoom()
     {
-        string roomName = input_field_text_obj.GetComponent<Text>().text;
+        string roomName = name_input_field_text_obj.GetComponent<Text>().text;
+
+        /* WORLD_SIZE: is broken
+        string raw_worldSize = size_input_field_text_obj.GetComponent<Text>().text;
+        int worldSize;
+        if (raw_worldSize.Length > 0)
+        {
+            try { worldSize = int.Parse(raw_worldSize); }
+            catch (Exception e)
+            { size_input_field_text_obj.GetComponent<Text>().text = "Invalid size (need 1-100)"; return; }
+        }
+        else
+        {
+            worldSize = 10;
+        }
+
+        Globals.world_size = worldSize;
+        */
+        
         Debug.Log("Attempting to create room \"" + roomName + "\"");
         transform.GetChild(0).GetComponent<Text>().text = "Creating...";
         RoomOptions roomOps = new RoomOptions()
@@ -26,7 +47,7 @@ public class RoomCreator : MonoBehaviourPunCallbacks
 
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
-        input_field_text_obj.GetComponent<Text>().text = "FAILED";
+        name_input_field_text_obj.GetComponent<Text>().text = "FAILED";
         transform.GetChild(0).GetComponent<Text>().text = "Create";
     }
 }

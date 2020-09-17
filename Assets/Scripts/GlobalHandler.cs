@@ -101,4 +101,5 @@ public static class Globals
     public static float turn_amount = 28.0f;
     public static float cap_amount = 25.0f;
     public static float regen_amount = 0.3f;
+    public static int world_size = 0;
 }
