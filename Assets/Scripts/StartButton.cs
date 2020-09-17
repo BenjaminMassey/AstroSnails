@@ -91,7 +91,7 @@ public class StartButton : MonoBehaviourPunCallbacks
         ColliderHandler ch = GameObject.Find("Colliders").GetComponent<ColliderHandler>();
         ch.GetPlayers();
         ch.Clear();
-        ch.data_iter = 0;
+        ch.data_iter = new int[] { 0, 0, 0, 0 };
         
         Globals.running = true;
         Globals.first_start = false;

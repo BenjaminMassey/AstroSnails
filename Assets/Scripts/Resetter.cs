@@ -44,8 +44,8 @@ public class Resetter : MonoBehaviour
         } while (boxes.Length > 0);
 
         ColliderHandler ch = cols.GetComponent<ColliderHandler>();
-        ch.first_time = true;
-        ch.data_iter = 0;
+        ch.first_time = new bool[] { true, true, true, true };
+        ch.data_iter = new int[] { 0, 0, 0, 0 };
 
         GameObject.Find("Text").GetComponent<Text>().text = "";
 

@@ -315,7 +315,7 @@ public class PlayerHandler : MonoBehaviourPun
     {
         boosting = true;
 
-        Globals.collider_time = 0.05f;
+        Globals.collider_time = 0.015f;
 
         if (boost_text != null)
         {
@@ -348,8 +348,8 @@ public class PlayerHandler : MonoBehaviourPun
         {
             boost_text.text = "READY";
         }
-
-        Globals.collider_time = 0.1f;
+        
+        Globals.collider_time = 0.08f;
 
         boosting = false;
         
