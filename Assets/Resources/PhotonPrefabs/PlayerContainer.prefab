@@ -1264,7 +1264,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 700, y: 30}
+  m_SizeDelta: {x: 1500, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6215768695530042858
 CanvasRenderer:
@@ -5884,6 +5884,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: ModelContainer
       objectReference: {fileID: 0}
+    - target: {fileID: 2534866581884222612, guid: 36142d0d39a00294c9add0fcf89b15ac,
+        type: 3}
+      propertyPath: m_Name
+      value: Model
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 36142d0d39a00294c9add0fcf89b15ac,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -5959,11 +5964,6 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 470114c3b3b88c74cb1e3be0f109c2ba, type: 2}
-    - target: {fileID: 2534866581884222612, guid: 36142d0d39a00294c9add0fcf89b15ac,
-        type: 3}
-      propertyPath: m_Name
-      value: Model
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 36142d0d39a00294c9add0fcf89b15ac, type: 3}
 --- !u!4 &8229390945130398155 stripped

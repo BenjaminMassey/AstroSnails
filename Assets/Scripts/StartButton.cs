@@ -14,12 +14,10 @@ public class StartButton : MonoBehaviourPunCallbacks
     {
         if (PhotonNetwork.IsMasterClient)
         {
-            StartCoroutine("DelayedInteractible");
+            StartCoroutine("ReadyWait");
         }
         else
         {
-            GetComponent<Button>().interactable = false;
-            transform.GetChild(0).GetComponent<Text>().text = "Waiting...";
             StartCoroutine("CheckStarted");
         }
     }
@@ -46,8 +44,13 @@ public class StartButton : MonoBehaviourPunCallbacks
     public override void OnPlayerEnteredRoom(Player p)
     {
         base.OnPlayerEnteredRoom(p);
-        StopCoroutine("DelayedInteractible");
-        StartCoroutine("DelayedInteractible");
+        if (PhotonNetwork.IsMasterClient)
+        {
+            StopCoroutine("DelayedInteractible");
+            //StartCoroutine("DelayedInteractible");
+            StopCoroutine("ReadyWait");
+            StartCoroutine("ReadyWait");
+        }
     }
 
     public override void OnMasterClientSwitched(Player newMasterClient)
@@ -58,6 +61,25 @@ public class StartButton : MonoBehaviourPunCallbacks
             StopCoroutine("CheckStarted");
             StartCoroutine("DelayedInteractible");
         }
+    }
+
+    IEnumerator ReadyWait()
+    {
+        ReadyInit();
+        transform.GetChild(0).GetComponent<Text>().text = "Not all ready...";
+        GetComponent<Button>().interactable = false;
+
+        bool all_ready = false;
+        while (!all_ready)
+        {
+            all_ready = ReadyCheck();
+
+            Debug.Log("Ready Check: " + all_ready);
+
+            for (int _ = 0; _ < 30; _++) { yield return new WaitForFixedUpdate(); }
+        }
+
+        StartCoroutine("DelayedInteractible");
     }
 
     IEnumerator DelayedInteractible()
@@ -77,6 +99,9 @@ public class StartButton : MonoBehaviourPunCallbacks
 
     IEnumerator CheckStarted()
     {
+        transform.GetChild(0).GetComponent<Text>().text = "READY";
+        GetComponent<Button>().interactable = true;
+
         while (!Globals.running)
         {
             yield return new WaitForFixedUpdate();
@@ -84,20 +109,69 @@ public class StartButton : MonoBehaviourPunCallbacks
         Press();
         Destroy(gameObject);
     }
-    public void Press()
+
+    private void ReadyInit()
     {
-        /* Doesn't fix :(
-        // Fix for loading in with only one player (need a reload)
-        if (PhotonNetwork.IsMasterClient && !Globals.first_start && PhotonNetwork.CurrentRoom.PlayerCount > 1)
+        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
         {
-            int player_count = GameObject.FindGameObjectsWithTag("Player").Length;
-            Debug.Log("See " + player_count + " players in the scene");
-            if (player_count == 1)
+            if (PhotonNetwork.IsMasterClient) { continue; }
+
+            if (PhotonNetwork.PlayerList[i].CustomProperties.ContainsKey("ready"))
             {
-                PhotonNetwork.LoadLevel(2);
+                PhotonNetwork.PlayerList[i].CustomProperties["ready"] = false;
+            }
+            else
+            {
+                PhotonNetwork.PlayerList[i].CustomProperties.Add("ready", false);
             }
         }
-        */
+    }
+
+    private bool ReadyCheck()
+    {
+        Debug.Log("ReadyCheck() found " + PhotonNetwork.PlayerList.Length + " players");
+
+        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+        {
+            if (PhotonNetwork.PlayerList[i].IsMasterClient) { continue; }
+
+            if (PhotonNetwork.PlayerList[i].CustomProperties.ContainsKey("ready"))
+            {
+                Debug.Log("Player \"" + (string)PhotonNetwork.PlayerList[i].CustomProperties["player_name"] +
+                    "\" has ready value of " + (bool)PhotonNetwork.PlayerList[i].CustomProperties["ready"]);
+
+                if (!(bool)PhotonNetwork.PlayerList[i].CustomProperties["ready"])
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                PhotonNetwork.PlayerList[i].CustomProperties.Add("ready", false);
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    public void Press()
+    {
+        if (transform.GetChild(0).GetComponent<Text>().text.Equals("READY"))
+        {
+            if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey("ready"))
+            {
+                PhotonNetwork.LocalPlayer.CustomProperties["ready"] = true;
+            }
+            else
+            {
+                PhotonNetwork.LocalPlayer.CustomProperties.Add("ready", true);
+            }
+
+            transform.GetChild(0).GetComponent<Text>().text = "Waiting...";
+            GetComponent<Button>().interactable = false;
+            return;
+        }
 
         ColliderHandler ch = GameObject.Find("Colliders").GetComponent<ColliderHandler>();
         ch.GetPlayers();
@@ -107,7 +181,7 @@ public class StartButton : MonoBehaviourPunCallbacks
         Globals.running = true;
         Globals.first_start = false;
 
-        // Work around for bug that trails aren't clear
+        // Work around for bug that trails aren't cleared
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
         foreach (GameObject player in players)
         {
