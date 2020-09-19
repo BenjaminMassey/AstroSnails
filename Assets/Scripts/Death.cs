@@ -32,6 +32,21 @@ public class Death : MonoBehaviour
         fh.num_dead++;
         fh.graveyard.Add(gameObject);
 
+        if (transform.parent.GetComponent<PlayerHandler>().photonView.IsMine)
+        {
+            for (int i = 0; i < transform.parent.childCount; i++)
+            {
+                GameObject child = transform.parent.GetChild(i).gameObject;
+                if (child.name.Equals("Main Camera"))
+                {
+                    child.GetComponent<Camera>().enabled = false;
+                }
+            }
+
+            GameObject.Find("SpectateArea").GetComponent<BasicSpin>().enabled = true;
+            GameObject.Find("SpectateCamera").GetComponent<Camera>().enabled = true;
+        }
+
         transform.parent.GetComponent<PlayerHandler>().enabled = false;
 
         dead = true;
