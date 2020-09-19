@@ -14,6 +14,15 @@ public class PlayerHandler : MonoBehaviourPun
     [SerializeField]
     private Material[] materials;
 
+    [SerializeField]
+    private AudioSource jump_audio_source;
+    [SerializeField]
+    private AudioSource fly_audio_source;
+    [SerializeField]
+    private AudioSource boost_audio_source;
+    [SerializeField]
+    private AudioSource boost_rev_audio_source;
+
     public float player_local_z_start;
     //public Quaternion start_rot;
     public Vector3 start_rot;
@@ -249,6 +258,8 @@ public class PlayerHandler : MonoBehaviourPun
 
     IEnumerator Jump()
     {
+        jump_audio_source.Play();
+
         jumpable = false;
         gravity_on = false;
         float seconds = 0.5f;
@@ -270,11 +281,13 @@ public class PlayerHandler : MonoBehaviourPun
 
     IEnumerator Fly()
     {
+        fly_audio_source.Play();
         while (Input.GetKey(KeyCode.Space) && curr_fly > 0.0f)
         {
             curr_fly -= fly_cost;
             yield return new WaitForFixedUpdate();
         }
+        fly_audio_source.Stop();
         gravity_on = true;
     }
 
@@ -313,6 +326,8 @@ public class PlayerHandler : MonoBehaviourPun
 
     IEnumerator Boost()
     {
+        boost_audio_source.Play();
+
         boosting = true;
 
         Globals.collider_time = 0.015f;
@@ -333,6 +348,8 @@ public class PlayerHandler : MonoBehaviourPun
 
         run_speed = orig_speed;
 
+        boost_rev_audio_source.Play();
+
         if (boost_text != null)
         {
             boost_text.text = "Recharging...";
@@ -352,7 +369,6 @@ public class PlayerHandler : MonoBehaviourPun
         Globals.collider_time = 0.08f;
 
         boosting = false;
-        
     }
 
     public void ResetFly()
