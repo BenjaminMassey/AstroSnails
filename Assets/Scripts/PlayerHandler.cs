@@ -344,11 +344,15 @@ public class PlayerHandler : MonoBehaviourPun
         for (int i = 0; i < time_iters; i++)
         {
             yield return new WaitForFixedUpdate();
+            if (i == time_iters - 15)
+            {
+                boost_rev_audio_source.Play();
+            }
         }
 
         run_speed = orig_speed;
 
-        boost_rev_audio_source.Play();
+        
 
         if (boost_text != null)
         {
