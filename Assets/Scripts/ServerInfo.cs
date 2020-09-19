@@ -8,6 +8,8 @@ public class ServerInfo : MonoBehaviourPun
 {
     Text t;
 
+    private float secs = 1.0f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -23,7 +25,7 @@ public class ServerInfo : MonoBehaviourPun
             content += "Room: " + PhotonNetwork.CurrentRoom.Name + "\n";
             content += "Ping: " + PhotonNetwork.GetPing();
             t.text = content;
-            for (int i = 0; i < 50 * 1.0f; i++)
+            for (int i = 0; i < 50 * secs; i++)
             {
                 yield return new WaitForFixedUpdate();
             }

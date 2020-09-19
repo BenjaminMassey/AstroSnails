@@ -4,14 +4,21 @@ using UnityEngine;
 using Photon.Pun;
 using UnityEngine.UI;
 using Photon.Realtime;
+using ExitGames.Client.Photon;
 
-public class StartButton : MonoBehaviourPunCallbacks
+public class StartButton : MonoBehaviourPunCallbacks, IOnEventCallback
 {
     public override void OnEnable() { PhotonNetwork.AddCallbackTarget(this); }
     public override void OnDisable() { PhotonNetwork.RemoveCallbackTarget(this); }
 
+    private const byte ready_event_code = 69;
+
+    private int ready_count;
+
     private void Start()
     {
+        ready_count = 1;
+
         if (PhotonNetwork.IsMasterClient)
         {
             StartCoroutine("ReadyWait");
@@ -129,6 +136,9 @@ public class StartButton : MonoBehaviourPunCallbacks
 
     private bool ReadyCheck()
     {
+        return ready_count >= PhotonNetwork.PlayerList.Length;
+
+        /*
         Debug.Log("ReadyCheck() found " + PhotonNetwork.PlayerList.Length + " players");
 
         for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
@@ -152,6 +162,16 @@ public class StartButton : MonoBehaviourPunCallbacks
             }
         }
         return true;
+        */
+    }
+
+    public void OnEvent(EventData photonEvent)
+    {
+        if (PhotonNetwork.IsMasterClient && photonEvent.Code == ready_event_code)
+        {
+            Debug.Log("Got photon event!");
+            ready_count++;
+        }
     }
 
 
@@ -159,6 +179,7 @@ public class StartButton : MonoBehaviourPunCallbacks
     {
         if (transform.GetChild(0).GetComponent<Text>().text.Equals("READY"))
         {
+            /*
             if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey("ready"))
             {
                 PhotonNetwork.LocalPlayer.CustomProperties["ready"] = true;
@@ -167,6 +188,9 @@ public class StartButton : MonoBehaviourPunCallbacks
             {
                 PhotonNetwork.LocalPlayer.CustomProperties.Add("ready", true);
             }
+            */
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.MasterClient };
+            PhotonNetwork.RaiseEvent(ready_event_code, null, raiseEventOptions, SendOptions.SendReliable);
 
             transform.GetChild(0).GetComponent<Text>().text = "Waiting...";
             GetComponent<Button>().interactable = false;
