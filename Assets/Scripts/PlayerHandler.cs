@@ -260,7 +260,7 @@ public class PlayerHandler : MonoBehaviourPun
 
     IEnumerator Jump()
     {
-        jump_audio_source.Play();
+        VarietyPlay(jump_audio_source);
 
         jumpable = false;
         gravity_on = false;
@@ -283,7 +283,7 @@ public class PlayerHandler : MonoBehaviourPun
 
     IEnumerator Fly()
     {
-        fly_audio_source.Play();
+        VarietyPlay(fly_audio_source);
         steam_effect.SetActive(true);
         while (Input.GetKey(KeyCode.Space) && curr_fly > 0.0f)
         {
@@ -330,7 +330,7 @@ public class PlayerHandler : MonoBehaviourPun
 
     IEnumerator Boost()
     {
-        boost_audio_source.Play();
+        VarietyPlay(boost_audio_source);
 
         boosting = true;
 
@@ -350,7 +350,7 @@ public class PlayerHandler : MonoBehaviourPun
             yield return new WaitForFixedUpdate();
             if (i == time_iters - 15 && Globals.running)
             {
-                boost_rev_audio_source.Play();
+                VarietyPlay(boost_rev_audio_source);
             }
         }
 
@@ -382,5 +382,11 @@ public class PlayerHandler : MonoBehaviourPun
     public void ResetFly()
     {
         curr_fly = max_fly;
+    }
+
+    private void VarietyPlay(AudioSource sfx)
+    {
+        sfx.pitch = UnityEngine.Random.Range(0.8f, 1.3f);
+        sfx.Play();
     }
 }
