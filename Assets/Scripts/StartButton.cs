@@ -30,8 +30,7 @@ public class StartButton : MonoBehaviourPunCallbacks, IOnEventCallback
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && 
-            PhotonNetwork.IsMasterClient && 
+        if (Input.GetKeyDown(KeyCode.Space) &&
             GetComponent<Button>().interactable)
         {
             Press();
@@ -72,7 +71,6 @@ public class StartButton : MonoBehaviourPunCallbacks, IOnEventCallback
 
     IEnumerator ReadyWait()
     {
-        ReadyInit();
         transform.GetChild(0).GetComponent<Text>().text = "Not all ready...";
         GetComponent<Button>().interactable = false;
 
@@ -117,59 +115,16 @@ public class StartButton : MonoBehaviourPunCallbacks, IOnEventCallback
         Destroy(gameObject);
     }
 
-    private void ReadyInit()
-    {
-        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
-        {
-            if (PhotonNetwork.IsMasterClient) { continue; }
-
-            if (PhotonNetwork.PlayerList[i].CustomProperties.ContainsKey("ready"))
-            {
-                PhotonNetwork.PlayerList[i].CustomProperties["ready"] = false;
-            }
-            else
-            {
-                PhotonNetwork.PlayerList[i].CustomProperties.Add("ready", false);
-            }
-        }
-    }
-
     private bool ReadyCheck()
     {
         return ready_count >= PhotonNetwork.PlayerList.Length;
-
-        /*
-        Debug.Log("ReadyCheck() found " + PhotonNetwork.PlayerList.Length + " players");
-
-        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
-        {
-            if (PhotonNetwork.PlayerList[i].IsMasterClient) { continue; }
-
-            if (PhotonNetwork.PlayerList[i].CustomProperties.ContainsKey("ready"))
-            {
-                Debug.Log("Player \"" + (string)PhotonNetwork.PlayerList[i].CustomProperties["player_name"] +
-                    "\" has ready value of " + (bool)PhotonNetwork.PlayerList[i].CustomProperties["ready"]);
-
-                if (!(bool)PhotonNetwork.PlayerList[i].CustomProperties["ready"])
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                PhotonNetwork.PlayerList[i].CustomProperties.Add("ready", false);
-                return false;
-            }
-        }
-        return true;
-        */
     }
 
     public void OnEvent(EventData photonEvent)
     {
         if (PhotonNetwork.IsMasterClient && photonEvent.Code == ready_event_code)
         {
-            Debug.Log("Got photon event!");
+            Debug.Log("Master got a ready-up");
             ready_count++;
         }
     }
@@ -179,16 +134,6 @@ public class StartButton : MonoBehaviourPunCallbacks, IOnEventCallback
     {
         if (transform.GetChild(0).GetComponent<Text>().text.Equals("READY"))
         {
-            /*
-            if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey("ready"))
-            {
-                PhotonNetwork.LocalPlayer.CustomProperties["ready"] = true;
-            }
-            else
-            {
-                PhotonNetwork.LocalPlayer.CustomProperties.Add("ready", true);
-            }
-            */
             RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.MasterClient };
             PhotonNetwork.RaiseEvent(ready_event_code, null, raiseEventOptions, SendOptions.SendReliable);
 
