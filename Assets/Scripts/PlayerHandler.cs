@@ -22,6 +22,8 @@ public class PlayerHandler : MonoBehaviourPun
     private AudioSource boost_audio_source;
     [SerializeField]
     private AudioSource boost_rev_audio_source;
+    [SerializeField]
+    private GameObject steam_effect;
 
     public float player_local_z_start;
     //public Quaternion start_rot;
@@ -282,12 +284,14 @@ public class PlayerHandler : MonoBehaviourPun
     IEnumerator Fly()
     {
         fly_audio_source.Play();
+        steam_effect.SetActive(true);
         while (Input.GetKey(KeyCode.Space) && curr_fly > 0.0f)
         {
             curr_fly -= fly_cost;
             yield return new WaitForFixedUpdate();
         }
         fly_audio_source.Stop();
+        steam_effect.SetActive(false);
         gravity_on = true;
     }
 
