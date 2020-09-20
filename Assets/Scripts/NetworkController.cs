@@ -8,6 +8,8 @@ public class NetworkController : MonoBehaviourPunCallbacks
 {
     [SerializeField]
     private GameObject name_input_text;
+    [SerializeField]
+    private GameObject server_selection_obj;
 
     public void StartConnect()
     {
@@ -18,6 +20,9 @@ public class NetworkController : MonoBehaviourPunCallbacks
         //if (!PhotonNetwork.IsConnected)
         else
         {
+            Dropdown dd = server_selection_obj.GetComponent<Dropdown>();
+            string option = dd.options[dd.value].text;
+            PhotonNetwork.PhotonServerSettings.AppSettings.FixedRegion = RegionConvert(option);
             PhotonNetwork.ConnectUsingSettings();
         }
         GameObject.Find("ButtonText").GetComponent<Text>().text = "Connecting...";
@@ -42,10 +47,58 @@ public class NetworkController : MonoBehaviourPunCallbacks
         PhotonNetwork.LocalPlayer.SetCustomProperties(properties);//
     }
 
-    // Update is called once per frame
-    void Update()
+    private string RegionConvert(string raw)
     {
-        
+        string converted = "";
+        switch (raw)
+        {
+            case "US (West)":
+                converted = "usw";
+                break;
+            case "US (East)":
+                converted = "us";
+                break;
+            case "Asia":
+                converted = "asia";
+                break;
+            case "Australia":
+                converted = "au";
+                break;
+            case "Canada":
+                converted = "cae";
+                break;
+            case "China":
+                converted = "cn";
+                break;
+            case "Europe":
+                converted = "eu";
+                break;
+            case "India":
+                converted = "in";
+                break;
+            case "Japan":
+                converted = "jp";
+                break;
+            case "Russia":
+                converted = "ru";
+                break;
+            case "Russia (East)":
+                converted = "rue";
+                break;
+            case "South Africa":
+                converted = "za";
+                break;
+            case "South America":
+                converted = "sa";
+                break;
+            case "South Korea":
+                converted = "kr";
+                break;
+            default:
+                converted = "usw";
+                break;
+        }
+        return converted;
     }
 
     private void OnApplicationQuit()
