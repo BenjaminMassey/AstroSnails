@@ -27,7 +27,11 @@ public class RoomController : MonoBehaviourPunCallbacks
         if (PhotonNetwork.IsMasterClient)
         {
             /* WORLD_SIZE: is broken
-            PhotonNetwork.CurrentRoom.CustomProperties["world_size"] = Globals.world_size;
+            PhotonNetwork.CurrentRoom.CustomProperties.Add("world_size", Globals.world_size);
+            */
+            /* Password via room properties is broken
+            Debug.Log("Making room with password of \"" + Globals.room_password + "\"");
+            PhotonNetwork.CurrentRoom.CustomProperties.Add("password", Globals.room_password);
             */
             Debug.Log("Starting game");
             PhotonNetwork.LoadLevel(1);

@@ -40,7 +40,6 @@ public class GlobalHandler : MonoBehaviourPun
         {
             if (PhotonNetwork.MasterClient.CustomProperties.ContainsKey("running"))
             {
-                
                 if (Globals.running != (bool)PhotonNetwork.MasterClient.CustomProperties["running"])
                 {
                     /*
@@ -101,5 +100,8 @@ public static class Globals
     public static float turn_amount = 28.0f;
     public static float cap_amount = 25.0f;
     public static float regen_amount = 0.3f;
-    public static int world_size = 0;
+    //public static int world_size = 0;
+    //public static string room_password = "";
+    //public static List<RoomInfo> photon_rooms;
+    public static bool wrong_password = false;
 }

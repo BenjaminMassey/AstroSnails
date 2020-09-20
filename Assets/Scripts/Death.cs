@@ -40,11 +40,13 @@ public class Death : MonoBehaviour
                 if (child.name.Equals("Main Camera"))
                 {
                     child.GetComponent<Camera>().enabled = false;
+                    child.GetComponent<AudioListener>().enabled = false;
                 }
             }
 
             GameObject.Find("SpectateArea").GetComponent<BasicSpin>().enabled = true;
             GameObject.Find("SpectateCamera").GetComponent<Camera>().enabled = true;
+            GameObject.Find("SpectateCamera").GetComponent<AudioListener>().enabled = true;
         }
 
         transform.parent.GetComponent<PlayerHandler>().enabled = false;

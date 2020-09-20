@@ -207,6 +207,7 @@ GameObject:
   - component: {fileID: 258850451}
   - component: {fileID: 258850452}
   - component: {fileID: 258850453}
+  - component: {fileID: 258850454}
   m_Layer: 0
   m_Name: GameSetup
   m_TagString: Untagged
@@ -278,6 +279,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   num_dead: 0
   graveyard: []
+--- !u!114 &258850454
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 258850448}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cd11f359155ec9429af48ced5015469, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &343517079
 GameObject:
   m_ObjectHideFlags: 0
@@ -871,7 +884,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1116085667}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!20 &1116085669
 Camera:
   m_ObjectHideFlags: 0

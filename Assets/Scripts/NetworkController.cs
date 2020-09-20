@@ -11,7 +11,12 @@ public class NetworkController : MonoBehaviourPunCallbacks
 
     public void StartConnect()
     {
-        if (!PhotonNetwork.IsConnected)
+        if (PhotonNetwork.IsConnected)
+        {
+            PhotonNetwork.Reconnect();
+        }
+        //if (!PhotonNetwork.IsConnected)
+        else
         {
             PhotonNetwork.ConnectUsingSettings();
         }
@@ -26,7 +31,14 @@ public class NetworkController : MonoBehaviourPunCallbacks
         string name = name_input_text.GetComponent<Text>().text;
         ExitGames.Client.Photon.Hashtable properties =
                 PhotonNetwork.LocalPlayer.CustomProperties;
-        properties.Add("player_name", name);
+        if (properties.ContainsKey("player_name"))
+        {
+            properties["player_name"] = name;
+        }
+        else
+        {
+            properties.Add("player_name", name);
+        }
         PhotonNetwork.LocalPlayer.SetCustomProperties(properties);//
     }
 

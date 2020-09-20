@@ -24,6 +24,8 @@ public class LobbyScript : MonoBehaviourPunCallbacks
     {
         base.OnRoomListUpdate(roomList);
 
+        //Globals.photon_rooms = roomList;
+
         Debug.Log("See " + roomList.Count + " available rooms");
 
         GameObject content = GameObject.Find("Content");
