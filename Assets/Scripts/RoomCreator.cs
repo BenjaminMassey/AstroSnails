@@ -21,7 +21,14 @@ public class RoomCreator : MonoBehaviourPunCallbacks
 
         string password = password_input_field_obj.GetComponent<InputField>().text;
         //Globals.room_password = password;
-        PhotonNetwork.LocalPlayer.CustomProperties.Add("password", password);
+        if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey("password"))
+        {
+            PhotonNetwork.LocalPlayer.CustomProperties["password"] = password;
+        }
+        else
+        {
+            PhotonNetwork.LocalPlayer.CustomProperties.Add("password", password);
+        }
 
         /* WORLD_SIZE: is broken
         string raw_worldSize = size_input_field_text_obj.GetComponent<Text>().text;

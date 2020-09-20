@@ -19,9 +19,13 @@ public class ServerInfo : MonoBehaviourPun
 
     IEnumerator Updater()
     {
+        string region;
+        string content;
         while (true)
         {
-            string content = "Server: " + PhotonNetwork.CloudRegion + "\n";
+            region = PhotonNetwork.CloudRegion.Replace("*", "");
+            region = region.Replace("/", "");
+            content = "Server: " + region + "\n";
             content += "Room: " + PhotonNetwork.CurrentRoom.Name + "\n";
             content += "Ping: " + PhotonNetwork.GetPing();
             t.text = content;
