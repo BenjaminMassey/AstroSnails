@@ -58,5 +58,9 @@ public class Death : MonoBehaviour
 
         dead = true;
     }
-    
+
+    public bool IsDead()
+    {
+        return dead;
+    }
 }

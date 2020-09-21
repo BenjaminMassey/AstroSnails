@@ -54,7 +54,15 @@ public class Leaderboard : MonoBehaviourPunCallbacks
             {
                 Globals.win_data.Add(pname, 0);
             }
-            pnames[i] = pname;
+            if (players[i].CustomProperties.ContainsKey("player_num"))
+            {
+                Debug.Log("Found player num for leaderboard, using");
+                pnames[(int)players[i].CustomProperties["player_num"] - 1] = pname;
+            }
+            else
+            {
+                pnames[i] = pname;
+            }
         }
 
         string[] names = Globals.win_data.Keys.ToArray<string>();
@@ -71,7 +79,7 @@ public class Leaderboard : MonoBehaviourPunCallbacks
 
         int[] score = Globals.win_data.Values.ToArray<int>();
 
-        string[] colors = new string[] { "orange", "green", "yellow", "pink" };
+        string[] colors = new string[] { "orange", "green", "pink", "yellow" };
 
         string content = "";
         for (int i = 0; i < Globals.win_data.Count; i++)

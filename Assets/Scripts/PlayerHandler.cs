@@ -8,6 +8,7 @@ using UnityEngine.UI;
 using Photon.Pun;
 using ExitGames.Client.Photon;
 using System.Linq;
+using Photon.Realtime;
 
 public class PlayerHandler : MonoBehaviourPun
 {
@@ -57,6 +58,7 @@ public class PlayerHandler : MonoBehaviourPun
     private Slider fly_slider;
     private Text boost_text;
     private TrailRenderer trail;
+    private Death death;
 
     // Start is called before the first frame update
     void Start()
@@ -99,6 +101,8 @@ public class PlayerHandler : MonoBehaviourPun
             boost_text.text = "READY";
         }
         trail = transform.GetChild(0).GetComponent<TrailRenderer>();
+
+        death = transform.GetChild(0).GetComponent<Death>();
         // SHOUDL BE SET BY GAMESETUP start_rot = Vector3.zero;
         //start_rot = transform.localRotation;
         StartCoroutine("FlyRegen");
@@ -181,7 +185,28 @@ public class PlayerHandler : MonoBehaviourPun
             }
             else
             {
-                int playerNum = PhotonNetwork.CurrentRoom.PlayerCount;
+                Player[] players = PhotonNetwork.PlayerList;
+                List<int> player_nums = new List<int>();
+                foreach (Player player in players)
+                {
+                    if (player.CustomProperties.ContainsKey("player_num"))
+                    {
+                        player_nums.Add((int)player.CustomProperties["player_num"]);
+                    }
+                }
+                player_nums.Sort();
+
+                int playerNum = 1;
+                foreach (int num in player_nums)
+                {
+                    if (playerNum == num) { playerNum++; }
+                    else { break; }
+                }
+
+                Debug.Log("player_num assigned of " + playerNum);
+
+                //int playerNum = PhotonNetwork.CurrentRoom.PlayerCount;
+
                 ExitGames.Client.Photon.Hashtable properties =
                         PhotonNetwork.LocalPlayer.CustomProperties;
 
@@ -268,6 +293,7 @@ public class PlayerHandler : MonoBehaviourPun
         float iters = 50 * seconds;
         for (int i = 0; i < iters; i++)
         {
+            if (death.IsDead()) { yield break; }
             RaiseLowerPlayer(jump_amount / iters);
             yield return new WaitForFixedUpdate();
         }
@@ -348,7 +374,7 @@ public class PlayerHandler : MonoBehaviourPun
         for (int i = 0; i < time_iters; i++)
         {
             yield return new WaitForFixedUpdate();
-            if (i == time_iters - 15 && Globals.running)
+            if (i == time_iters - 15 && !death.IsDead())
             {
                 VarietyPlay(boost_rev_audio_source);
             }
