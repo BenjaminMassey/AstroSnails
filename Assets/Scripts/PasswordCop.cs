@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
-using UnityEngine.SceneManagement;
 
 public class PasswordCop : MonoBehaviourPunCallbacks
 {
@@ -29,12 +28,5 @@ public class PasswordCop : MonoBehaviourPunCallbacks
             Debug.Log("No password: breaking out");
             PhotonNetwork.Disconnect();
         }
-    }
-
-    public override void OnDisconnected(DisconnectCause cause)
-    {
-        base.OnDisconnected(cause);
-        Globals.wrong_password = true;
-        SceneManager.LoadScene(0);
     }
 }
