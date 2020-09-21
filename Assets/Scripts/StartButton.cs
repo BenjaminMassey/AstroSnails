@@ -122,6 +122,20 @@ public class StartButton : MonoBehaviourPunCallbacks, IOnEventCallback
 
     public void OnEvent(EventData photonEvent)
     {
+        if (photonEvent.Code == ready_event_code)
+        {
+            string name = (string) photonEvent.CustomData;
+            if (Globals.ready_status.ContainsKey(name))
+            {
+                Globals.ready_status[name] = true;
+            }
+            else
+            {
+                Globals.ready_status.Add(name, true);
+            }
+            GameObject.Find("Leaderboard").GetComponent<Leaderboard>().RefreshBoard();
+        }
+
         if (PhotonNetwork.IsMasterClient && photonEvent.Code == ready_event_code)
         {
             Debug.Log("Master got a ready-up");
@@ -135,8 +149,8 @@ public class StartButton : MonoBehaviourPunCallbacks, IOnEventCallback
         if (transform.GetChild(0).GetComponent<Text>().text.Equals("READY"))
         {
             RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
-            //string name = (string) PhotonNetwork.LocalPlayer.CustomProperties["player_name"];
-            PhotonNetwork.RaiseEvent(ready_event_code, null, raiseEventOptions, SendOptions.SendReliable);
+            string name = (string) PhotonNetwork.LocalPlayer.CustomProperties["player_name"];
+            PhotonNetwork.RaiseEvent(ready_event_code, name, raiseEventOptions, SendOptions.SendReliable);
 
             transform.GetChild(0).GetComponent<Text>().text = "Waiting...";
             GetComponent<Button>().interactable = false;
@@ -148,8 +162,11 @@ public class StartButton : MonoBehaviourPunCallbacks, IOnEventCallback
         ch.Clear();
         ch.data_iter = new int[] { 0, 0, 0, 0 };
         
+
         Globals.running = true;
         Globals.first_start = false;
+        
+        GameObject.Find("Leaderboard").GetComponent<Leaderboard>().RefreshBoard();
 
         // Work around for bug that trails aren't cleared
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");

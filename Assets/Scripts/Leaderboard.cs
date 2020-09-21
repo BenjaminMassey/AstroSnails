@@ -17,6 +17,7 @@ public class Leaderboard : MonoBehaviourPunCallbacks
     void Start()
     {
         t = GetComponent<Text>();
+        Globals.ready_status.Clear();
         RefreshBoard();
     }
 
@@ -75,6 +76,18 @@ public class Leaderboard : MonoBehaviourPunCallbacks
         {
             //if (ignores.Contains(i)) { continue; }
             content += names[i] + ": " + score[i];
+            if (!Globals.running)
+            {
+                if (Globals.ready_status.ContainsKey(names[i]) &&
+                Globals.ready_status[names[i]] == true)
+                {
+                    content += " [✓]";
+                }
+                else
+                {
+                    content += " [ ]";
+                }
+            }
             if (i != Globals.win_data.Count - 1) { content += "\n"; }
         }
         Debug.Log("Leaderboard content: " + content);
