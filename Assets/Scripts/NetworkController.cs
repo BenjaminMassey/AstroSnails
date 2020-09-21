@@ -13,6 +13,11 @@ public class NetworkController : MonoBehaviourPunCallbacks
 
     public void StartConnect()
     {
+        if (name_input_text.GetComponent<Text>().text.Length == 0)
+        {
+            return;
+        }
+
         if (PhotonNetwork.IsConnected)
         {
             PhotonNetwork.Reconnect();

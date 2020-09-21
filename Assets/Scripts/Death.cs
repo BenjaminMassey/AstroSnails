@@ -11,6 +11,9 @@ using ExitGames.Client.Photon;
 
 public class Death : MonoBehaviour
 {
+    [SerializeField]
+    private GameObject top_text;
+
     private bool dead;
 
     private FinishHandler fh;
@@ -34,6 +37,8 @@ public class Death : MonoBehaviour
 
         if (transform.parent.GetComponent<PlayerHandler>().photonView.IsMine)
         {
+            top_text.GetComponent<Text>().text = "You died!";
+
             for (int i = 0; i < transform.parent.childCount; i++)
             {
                 GameObject child = transform.parent.GetChild(i).gameObject;

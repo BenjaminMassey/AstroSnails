@@ -134,7 +134,8 @@ public class StartButton : MonoBehaviourPunCallbacks, IOnEventCallback
     {
         if (transform.GetChild(0).GetComponent<Text>().text.Equals("READY"))
         {
-            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.MasterClient };
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
+            //string name = (string) PhotonNetwork.LocalPlayer.CustomProperties["player_name"];
             PhotonNetwork.RaiseEvent(ready_event_code, null, raiseEventOptions, SendOptions.SendReliable);
 
             transform.GetChild(0).GetComponent<Text>().text = "Waiting...";
