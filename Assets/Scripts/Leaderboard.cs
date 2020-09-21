@@ -71,11 +71,14 @@ public class Leaderboard : MonoBehaviourPunCallbacks
 
         int[] score = Globals.win_data.Values.ToArray<int>();
 
+        string[] colors = new string[] { "orange", "green", "yellow", "pink" };
+
         string content = "";
         for (int i = 0; i < Globals.win_data.Count; i++)
         {
             //if (ignores.Contains(i)) { continue; }
-            content += names[i] + ": " + score[i];
+            content += "<color=" + colors[i] + ">" + names[i] + "</color>";
+            content += ": " + score[i];
             if (!Globals.running)
             {
                 if (Globals.ready_status.ContainsKey(names[i]) &&
