@@ -37,7 +37,7 @@ public class PlayerHandler : MonoBehaviourPun
     public float max_fly; // 100
     private float fly_cost = 1.0f;
     public float fly_gain; // 1
-    private float boost_speed = 3.0f;
+    private float boost_speed = 2.0f;
     private float boost_time = 1.5f;
     private float boost_wait = 3.0f;
     private float jump_buffer_percent = 0.1f; // can toggle a jump for last 10% of prev jump
