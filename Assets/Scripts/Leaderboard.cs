@@ -79,7 +79,7 @@ public class Leaderboard : MonoBehaviourPunCallbacks
 
         int[] score = Globals.win_data.Values.ToArray<int>();
 
-        string[] colors = new string[] { "orange", "green", "pink", "yellow" };
+        string[] colors = new string[] { "orange", "green", "magenta", "yellow" };
 
         string content = "";
         for (int i = 0; i < Globals.win_data.Count; i++)
