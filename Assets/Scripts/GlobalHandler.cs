@@ -57,6 +57,7 @@ public class GlobalHandler : MonoBehaviourPun
         }
         else
         {
+            if (!PhotonNetwork.IsConnected) { return; }
             if (PhotonNetwork.MasterClient.CustomProperties.ContainsKey("running"))
             {
                 Globals.running = (bool)PhotonNetwork.MasterClient.CustomProperties["running"];

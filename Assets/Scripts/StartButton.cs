@@ -13,11 +13,33 @@ public class StartButton : MonoBehaviourPunCallbacks, IOnEventCallback
 
     private const byte ready_event_code = 69;
 
+    private const byte start_event_code = 70;
+
     private int ready_count;
+
+    private GameObject top_text_obj;
+
+    private bool pressing;
+
+    private bool guest_waiting;
 
     private void Start()
     {
         ready_count = 1;
+
+        Transform p = transform.parent;
+        for (int i = 0; i < p.childCount; i++)
+        {
+            GameObject c = p.GetChild(i).gameObject;
+            if (c.name.Equals("Text"))
+            {
+                top_text_obj = c;
+                break;
+            }
+        }
+
+        pressing = false;
+        guest_waiting = true;
 
         if (PhotonNetwork.IsMasterClient)
         {
@@ -107,12 +129,11 @@ public class StartButton : MonoBehaviourPunCallbacks, IOnEventCallback
         transform.GetChild(0).GetComponent<Text>().text = "READY";
         GetComponent<Button>().interactable = true;
 
-        while (!Globals.running)
+        while (guest_waiting)
         {
             yield return new WaitForFixedUpdate();
         }
         Press();
-        Destroy(gameObject);
     }
 
     private bool ReadyCheck()
@@ -141,6 +162,11 @@ public class StartButton : MonoBehaviourPunCallbacks, IOnEventCallback
             Debug.Log("Master got a ready-up");
             ready_count++;
         }
+
+        if (photonEvent.Code == start_event_code)
+        {
+            guest_waiting = false;
+        }
     }
 
 
@@ -157,15 +183,39 @@ public class StartButton : MonoBehaviourPunCallbacks, IOnEventCallback
             return;
         }
 
+        if (pressing) { return; }
+
+        pressing = true;
+
         ColliderHandler ch = GameObject.Find("Colliders").GetComponent<ColliderHandler>();
         ch.GetPlayers();
         ch.Clear();
         ch.data_iter = new int[] { 0, 0, 0, 0 };
-        
+
+        StartCoroutine("StartGame");
+    }
+
+    private IEnumerator StartGame()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+            PhotonNetwork.RaiseEvent(start_event_code, null, raiseEventOptions, SendOptions.SendReliable);
+        }
+        Text t = top_text_obj.GetComponent<Text>();
+        t.text = "3...";
+        for (int _ = 0; _ < 50; _++) { yield return new WaitForFixedUpdate(); }
+        t.text = "2...";
+        for (int _ = 0; _ < 50; _++) { yield return new WaitForFixedUpdate(); }
+        t.text = "1...";
+        for (int _ = 0; _ < 50; _++) { yield return new WaitForFixedUpdate(); }
+        t.text = "GO!";
+        for (int _ = 0; _ < 5; _++) { yield return new WaitForFixedUpdate(); }
+        t.text = "";
 
         Globals.running = true;
         Globals.first_start = false;
-        
+
         GameObject.Find("Leaderboard").GetComponent<Leaderboard>().RefreshBoard();
 
         // Work around for bug that trails aren't cleared

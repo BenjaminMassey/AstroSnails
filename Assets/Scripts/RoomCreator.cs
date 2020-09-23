@@ -15,9 +15,12 @@ public class RoomCreator : MonoBehaviourPunCallbacks
     [SerializeField]
     private GameObject size_input_field_text_obj;
 
+    private RoomOptions roomOps;
+    private string roomName;
+
     public void CreateRoom()
     {
-        string roomName = name_input_field_text_obj.GetComponent<Text>().text;
+        roomName = name_input_field_text_obj.GetComponent<Text>().text;
 
         string password = password_input_field_obj.GetComponent<InputField>().text;
         //Globals.room_password = password;
@@ -49,12 +52,22 @@ public class RoomCreator : MonoBehaviourPunCallbacks
 
         Debug.Log("Attempting to create room \"" + roomName + "\"");
         transform.GetChild(0).GetComponent<Text>().text = "Creating...";
-        RoomOptions roomOps = new RoomOptions()
+        roomOps = new RoomOptions()
         {
             IsVisible = true,
             IsOpen = true,
             MaxPlayers = 4
         };
+        
+        StartCoroutine("SafeCreateRoom");
+    }
+
+    private IEnumerator SafeCreateRoom()
+    {
+        while (!PhotonNetwork.IsConnectedAndReady)
+        {
+            yield return new WaitForFixedUpdate();
+        }
         PhotonNetwork.CreateRoom(roomName, roomOps);
     }
 

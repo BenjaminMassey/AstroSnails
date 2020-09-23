@@ -57,7 +57,11 @@ public class Leaderboard : MonoBehaviourPunCallbacks
             if (players[i].CustomProperties.ContainsKey("player_num"))
             {
                 Debug.Log("Found player num for leaderboard, using");
-                pnames[(int)players[i].CustomProperties["player_num"] - 1] = pname;
+                int index_num = (int)players[i].CustomProperties["player_num"] - 1;
+                if (index_num < pnames.Length)
+                {
+                    pnames[index_num] = pname;
+                }
             }
             else
             {
