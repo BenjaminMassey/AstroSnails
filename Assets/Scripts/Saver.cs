@@ -44,9 +44,10 @@ public static class SaveData
         // https://support.unity3d.com/hc/en-us/articles/115000341143/comments/360000857792
         try
         {
-            using (StreamWriter sw = new StreamWriter(new FileStream(file_path, FileMode.OpenOrCreate, FileAccess.Write)))
+            using (StreamWriter sw = new StreamWriter(new FileStream(file_path, FileMode.Create, FileAccess.Write)))
             {
                 sw.Write(data);
+                sw.Flush();
                 sw.Close();
             }
         }
