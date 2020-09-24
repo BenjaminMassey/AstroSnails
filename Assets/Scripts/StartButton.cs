@@ -167,6 +167,7 @@ public class StartButton : MonoBehaviourPunCallbacks, IOnEventCallback
         {
             guest_waiting = false;
 
+            string name = (string)PhotonNetwork.MasterClient.CustomProperties["player_name"];
             if (Globals.ready_status.ContainsKey(name))
             {
                 Globals.ready_status[name] = true;
@@ -209,7 +210,7 @@ public class StartButton : MonoBehaviourPunCallbacks, IOnEventCallback
     {
         if (PhotonNetwork.IsMasterClient)
         {
-            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
             PhotonNetwork.RaiseEvent(start_event_code, null, raiseEventOptions, SendOptions.SendReliable);
             transform.GetChild(0).GetComponent<Text>().text = "Starting...";
             GetComponent<Button>().interactable = false;
