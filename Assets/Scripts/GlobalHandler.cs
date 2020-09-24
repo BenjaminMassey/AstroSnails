@@ -98,7 +98,7 @@ public static class Globals
     public static Dictionary<string, int> customization_points = null;
     public static int points_left = 10;
     public static float speed_amount = 3.5f;
-    public static float turn_amount = 19.0f;
+    public static float turn_amount = 25.0f;
     public static float cap_amount = 25.0f;
     public static float regen_amount = 0.25f;
     //public static int world_size = 0;

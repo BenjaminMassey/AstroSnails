@@ -65,7 +65,7 @@ public class PlayerHandler : MonoBehaviourPun
     {
         // Customizible trait starting values
         run_speed = 20.0f;
-        turn_speed = 30.0f;
+        turn_speed = 40.0f;
         max_fly = 50.0f;
         fly_gain = 1.0f;
 
