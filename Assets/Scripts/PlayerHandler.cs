@@ -294,15 +294,30 @@ public class PlayerHandler : MonoBehaviourPun
 
         jumpable = false;
         gravity_on = false;
-        float seconds = 0.5f;
+        float seconds = 0.3f;
         float iters = 50 * seconds;
-        for (int i = 0; i < iters; i++)
+        float short_hop_thresh = 0.5f; // can short hop this % of the way through
+
+        bool short_hop = false;
+        float i = 0;
+        while (i < iters)
         {
+            // Allow for varying heights based on how long pressing
+            if (i > iters * short_hop_thresh
+                && !Input.GetKey(KeyCode.Space) && !Input.GetKey(KeyCode.JoystickButton0))
+            {
+                short_hop = true;
+                break;
+            }
+            // Completely stop if this player is dead
             if (death.IsDead()) { yield break; }
+            // Raise player by correct amount
             RaiseLowerPlayer(jump_amount / iters);
+            // Wait+increment so that this all happens overtime
             yield return new WaitForFixedUpdate();
+            i += 1.0f;
         }
-        if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.JoystickButton0))
+        if (!short_hop && (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.JoystickButton0)))
         {
             StartCoroutine("Fly");
         }
