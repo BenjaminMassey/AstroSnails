@@ -49,6 +49,7 @@ public class LobbyScript : MonoBehaviourPunCallbacks
             buttons[i].GetComponent<RectTransform>().anchoredPosition = new Vector2(8.5f, y);
                 //.rect.Set(br.x, y, br.width, br.height);
             buttons[i].transform.GetChild(0).GetComponent<Text>().text = roomList[i].Name;
+            buttons[i].GetComponent<Image>().enabled = true;
 
             y -= 100;
         }
