@@ -201,6 +201,8 @@ public class StartButton : MonoBehaviourPunCallbacks, IOnEventCallback
         {
             RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
             PhotonNetwork.RaiseEvent(start_event_code, null, raiseEventOptions, SendOptions.SendReliable);
+            transform.GetChild(0).GetComponent<Text>().text = "Starting...";
+            GetComponent<Button>().interactable = false;
         }
         Text t = top_text_obj.GetComponent<Text>();
         t.text = "3...";
