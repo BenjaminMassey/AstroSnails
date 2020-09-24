@@ -176,12 +176,16 @@ public class PlayerHandler : MonoBehaviourPun
             if (rot_set) { return; }
             if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey("player_num"))
             {
-                float[] spots = new float[] { 0.0f, 90.0f, 180.0f, 270.0f };
+                Vector3[] starting_rots = new Vector3[]
+                {
+                    new Vector3(0.0f, 0.0f, 0.0f),
+                    new Vector3(180.0f, 0.0f, 0.0f),
+                    new Vector3(0.0f, -90.0f, 0.0f),
+                    new Vector3(0.0f, 90.0f, -180.0f)
+                };
                 int index = (int) PhotonNetwork.LocalPlayer.CustomProperties["player_num"] - 1;
-                float my_y = spots[index];
                 transform.rotation = Quaternion.identity;
-                transform.Rotate(new Vector3(0.0f, my_y, 0.0f));
-                //transform.rotation.eulerAngles.Set(0.0f, my_y, 0.0f);
+                transform.Rotate(starting_rots[index]);
             }
             else
             {
