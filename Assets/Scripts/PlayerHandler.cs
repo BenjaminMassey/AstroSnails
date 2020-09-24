@@ -251,13 +251,13 @@ public class PlayerHandler : MonoBehaviourPun
 
         //t.text = player.transform.localPosition.ToString();
 
-        if (jumpable && (Input.GetKeyDown(KeyCode.Space) || jump_buffer))
+        if (jumpable && (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.JoystickButton0) || jump_buffer))
         {
             jump_buffer = false;
             StartCoroutine("Jump");
         }
 
-        if (!boosting && Input.GetKeyDown(KeyCode.LeftShift))
+        if (!boosting && (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.JoystickButton2)))
         {
             StartCoroutine("Boost");
         }
@@ -268,7 +268,8 @@ public class PlayerHandler : MonoBehaviourPun
             if (gravity_on)
             {
                 RaiseLowerPlayer(-1.0f * fall_speed * Time.deltaTime);
-                if (Input.GetKeyDown(KeyCode.Space) && z_diff < (player_local_z_start * jump_buffer_percent))
+                if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.JoystickButton0))
+                    && z_diff < (player_local_z_start * jump_buffer_percent))
                 {
                     jump_buffer = true;
                     // Put jump buffer stuff here
@@ -301,7 +302,7 @@ public class PlayerHandler : MonoBehaviourPun
             RaiseLowerPlayer(jump_amount / iters);
             yield return new WaitForFixedUpdate();
         }
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.JoystickButton0))
         {
             StartCoroutine("Fly");
         }
@@ -315,7 +316,7 @@ public class PlayerHandler : MonoBehaviourPun
     {
         VarietyPlay(fly_audio_source);
         steam_effect.SetActive(true);
-        while (Input.GetKey(KeyCode.Space) && curr_fly > 0.0f)
+        while ((Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.JoystickButton0)) && curr_fly > 0.0f)
         {
             curr_fly -= fly_cost;
             yield return new WaitForFixedUpdate();
@@ -386,9 +387,7 @@ public class PlayerHandler : MonoBehaviourPun
         }
 
         run_speed = orig_speed;
-
         
-
         if (boost_text != null)
         {
             boost_text.text = "Recharging...";

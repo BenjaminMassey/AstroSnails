@@ -52,8 +52,8 @@ public class StartButton : MonoBehaviourPunCallbacks, IOnEventCallback
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) &&
-            GetComponent<Button>().interactable)
+        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.JoystickButton0))
+            && GetComponent<Button>().interactable)
         {
             Press();
         }
