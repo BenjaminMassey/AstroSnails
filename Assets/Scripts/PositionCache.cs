@@ -32,9 +32,8 @@ public class PositionCache : MonoBehaviour
                 }
 
                 data.Add(transform.position);
-
-                float iter = (50 * Globals.collider_time) / speed_coeff;
-                for (int i = 0; i < iter; i++)
+                
+                for (int i = 0; i < Globals.collider_time; i++)
                 {
                     yield return new WaitForFixedUpdate();
                 }

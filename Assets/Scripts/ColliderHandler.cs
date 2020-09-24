@@ -24,7 +24,7 @@ public class ColliderHandler : MonoBehaviour
         GetPlayers();
         data_iter = new int[] { 0, 0, 0, 0 };
         first_time = new bool[] { true, true, true, true };
-        size = new Vector3(0.5f, 0.5f, 0.5f);
+        size = new Vector3(0.25f, 0.25f, 0.25f);
         StartCoroutine("Starter");
     }
     
@@ -62,19 +62,20 @@ public class ColliderHandler : MonoBehaviour
     {
         int player_num = current_player_num;
 
-        float speed_coeff = speeds[player_num] / 40.0f;
+        //float speed_coeff = speeds[player_num] / 40.0f;
 
         while (true)
         {
+            
             if (first_time[player_num])
             {
-                float wait_iter = 15 * speed_coeff;
-                for (int i = 0; i < wait_iter; i++)
+                for (int i = 0; i < Globals.collider_time * 3; i++)
                 {
                     yield return new WaitForFixedUpdate();
                 }
                 first_time[player_num] = false;
             }
+            
 
             bool failure = false;
             List<Vector3> points = players[player_num].GetComponent<PositionCache>().data;
@@ -91,9 +92,8 @@ public class ColliderHandler : MonoBehaviour
                 }
             }
             else { failure = true; }
-
-            float iters = (50 * Globals.collider_time) / speed_coeff;
-            for (int i = 0; i < iters; i++)
+            
+            for (int i = 0; i < Globals.collider_time; i++)
             {
                 yield return new WaitForFixedUpdate();
             }

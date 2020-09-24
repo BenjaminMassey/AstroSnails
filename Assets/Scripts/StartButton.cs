@@ -166,6 +166,16 @@ public class StartButton : MonoBehaviourPunCallbacks, IOnEventCallback
         if (photonEvent.Code == start_event_code)
         {
             guest_waiting = false;
+
+            if (Globals.ready_status.ContainsKey(name))
+            {
+                Globals.ready_status[name] = true;
+            }
+            else
+            {
+                Globals.ready_status.Add(name, true);
+            }
+            GameObject.Find("Leaderboard").GetComponent<Leaderboard>().RefreshBoard();
         }
     }
 

@@ -31,13 +31,13 @@ public class PlayerHandler : MonoBehaviourPun
     public Vector3 start_rot;
 
     // public ones are for Customization.cs
-    public float run_speed; // 45
-    public float turn_speed; // 125
-    private float jump_amount = 0.20f;
-    private float fall_speed = 0.30f;
-    public float max_fly; // 100
+    public float run_speed;
+    public float turn_speed;
+    private float jump_amount = 0.10f;
+    private float fall_speed = 0.15f;
+    public float max_fly;
     private float fly_cost = 1.0f;
-    public float fly_gain; // 1
+    public float fly_gain;
     private float boost_speed = 2.0f;
     private float boost_time = 1.5f;
     private float boost_wait = 3.0f;
@@ -64,8 +64,8 @@ public class PlayerHandler : MonoBehaviourPun
     void Start()
     {
         // Customizible trait starting values
-        run_speed = 40.0f;
-        turn_speed = 60.0f;
+        run_speed = 20.0f;
+        turn_speed = 30.0f;
         max_fly = 50.0f;
         fly_gain = 1.0f;
 
@@ -296,8 +296,8 @@ public class PlayerHandler : MonoBehaviourPun
         gravity_on = false;
         float seconds = 0.3f;
         float iters = 50 * seconds;
-        float short_hop_thresh_start = 0.5f; // can short hop this % of the way through
-        float short_hop_thresh_end = 0.8f; // stuck in full jump after this % of the way through
+        float short_hop_thresh_start = 0.6f; // can short hop this % of the way through
+        float short_hop_thresh_end = 0.85f; // stuck in full jump after this % of the way through
         
         bool short_hop = false;
         int i = 0;
@@ -333,14 +333,14 @@ public class PlayerHandler : MonoBehaviourPun
     IEnumerator Fly()
     {
         VarietyPlay(fly_audio_source);
-        steam_effect.SetActive(true);
+        //steam_effect.SetActive(true);
         while ((Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.JoystickButton0)) && curr_fly > 0.0f)
         {
             curr_fly -= fly_cost;
             yield return new WaitForFixedUpdate();
         }
         fly_audio_source.Stop();
-        steam_effect.SetActive(false);
+        //steam_effect.SetActive(false);
         gravity_on = true;
     }
 
@@ -384,8 +384,6 @@ public class PlayerHandler : MonoBehaviourPun
 
         boosting = true;
 
-        Globals.collider_time = 0.015f;
-
         if (boost_text != null)
         {
             boost_text.text = "Boosting!";
@@ -421,8 +419,6 @@ public class PlayerHandler : MonoBehaviourPun
         {
             boost_text.text = "READY";
         }
-        
-        Globals.collider_time = 0.08f;
 
         boosting = false;
     }
