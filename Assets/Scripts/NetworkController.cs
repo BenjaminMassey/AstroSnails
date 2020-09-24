@@ -17,6 +17,10 @@ public class NetworkController : MonoBehaviourPunCallbacks
         {
             return;
         }
+        else
+        {
+            GameObject.Find("NameInput").GetComponent<Saver>().Save();
+        }
 
         if (PhotonNetwork.IsConnected)
         {

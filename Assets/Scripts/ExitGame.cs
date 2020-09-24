@@ -8,7 +8,11 @@ public class ExitGame : MonoBehaviour
     public void Disco()
     {
         Globals.win_data.Clear();
-        GameObject.Find("GameSetup").GetComponent<FinishHandler>().StopAllCoroutines();
+        GameObject GS = GameObject.Find("GameSetup");
+        if (GS != null)
+        {
+            GS.GetComponent<FinishHandler>().StopAllCoroutines();
+        }
         PhotonNetwork.Disconnect();
     }
 
