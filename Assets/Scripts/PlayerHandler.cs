@@ -296,14 +296,15 @@ public class PlayerHandler : MonoBehaviourPun
         gravity_on = false;
         float seconds = 0.3f;
         float iters = 50 * seconds;
-        float short_hop_thresh = 0.5f; // can short hop this % of the way through
-
+        float short_hop_thresh_start = 0.5f; // can short hop this % of the way through
+        float short_hop_thresh_end = 0.8f; // stuck in full jump after this % of the way through
+        
         bool short_hop = false;
-        float i = 0;
+        int i = 0;
         while (i < iters)
         {
             // Allow for varying heights based on how long pressing
-            if (i > iters * short_hop_thresh
+            if (i > iters * short_hop_thresh_start && i < iters * short_hop_thresh_end
                 && !Input.GetKey(KeyCode.Space) && !Input.GetKey(KeyCode.JoystickButton0))
             {
                 short_hop = true;
@@ -313,10 +314,12 @@ public class PlayerHandler : MonoBehaviourPun
             if (death.IsDead()) { yield break; }
             // Raise player by correct amount
             RaiseLowerPlayer(jump_amount / iters);
-            // Wait+increment so that this all happens overtime
+            // Wait + increment so that this all happens overtime
             yield return new WaitForFixedUpdate();
-            i += 1.0f;
+            i++;
         }
+        Debug.Log("Reached height of " + (player.transform.localPosition.z - player_local_z_start));
+
         if (!short_hop && (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.JoystickButton0)))
         {
             StartCoroutine("Fly");
