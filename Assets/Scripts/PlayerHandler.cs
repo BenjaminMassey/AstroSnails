@@ -332,8 +332,9 @@ public class PlayerHandler : MonoBehaviourPun
                     fly_slider.value = curr_fly / max_fly;
                 }
 
+                float z_diff = player.transform.localPosition.z - player_local_z_start;
                 float diff = max_fly - curr_fly;
-                if (diff > 0.0f && gravity_on) // && gravity_on means not recharging while flying
+                if (diff > 0.0f && z_diff <= jump_amount * 0.1f) // && && z_diff == 0 means not recharging while flying/falling/rising
                 {
                     curr_fly += Mathf.Min(diff, fly_gain);
                 }

@@ -9,7 +9,7 @@ public class InputEnter : MonoBehaviour
 
     private Button b;
 
-    private string for_syd = "bum";
+    public string for_syd = "bum";
     // Start is called before the first frame update
     void Start()
     {
