@@ -294,10 +294,10 @@ public class PlayerHandler : MonoBehaviourPun
 
         jumpable = false;
         gravity_on = false;
-        float seconds = 0.3f;
+        float seconds = 0.4f;
         float iters = 50 * seconds;
-        float short_hop_thresh_start = 0.6f; // can short hop this % of the way through
-        float short_hop_thresh_end = 0.85f; // stuck in full jump after this % of the way through
+        float short_hop_thresh_start = 0.3f; // can short hop this % of the way through
+        float short_hop_thresh_end = 0.6f; // stuck in full jump after this % of the way through
         
         bool short_hop = false;
         int i = 0;
@@ -313,7 +313,8 @@ public class PlayerHandler : MonoBehaviourPun
             // Completely stop if this player is dead
             if (death.IsDead()) { yield break; }
             // Raise player by correct amount
-            RaiseLowerPlayer(jump_amount / iters);
+            RaiseLowerPlayer(Mathf.Max(((0.8f * iters) - i), 0.0f) * (jump_amount * 0.008f));
+            //RaiseLowerPlayer(jump_amount / iters);
             // Wait + increment so that this all happens overtime
             yield return new WaitForFixedUpdate();
             i++;
