@@ -38,7 +38,16 @@ public class FinishHandler : MonoBehaviourPunCallbacks
 
         num_dead = 0;
         graveyard = new List<GameObject>();
-        StartCoroutine("Checker");
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            StartCoroutine("Checker");
+        }
+
+        else
+        {
+            StartCoroutine("GuestFinish");
+        }
     }
 
     IEnumerator Checker()
@@ -47,33 +56,21 @@ public class FinishHandler : MonoBehaviourPunCallbacks
         {
             int count = 0;
             try { count = PhotonNetwork.CurrentRoom.PlayerCount; }
-            catch (Exception e) { }
+            catch (Exception e) { Debug.Log(e.ToString()); }
 
             if (count > 1)
             {
-                if (num_dead >= count - 1) { break; }
+                if (num_dead >= count - 1) { Debug.Log("broke out with " + num_dead + " dead"); break; }
             }
             else
             {
                 if (num_dead == 1) { break; }
             }
-            if (PhotonNetwork.MasterClient.CustomProperties.ContainsKey("winner_found") &&
-                (bool)PhotonNetwork.MasterClient.CustomProperties["winner_found"])
-            {
-                Debug.Log("Host found winner: abort");
-                break;
-            }
+
             yield return new WaitForFixedUpdate();
         }
 
-        if (PhotonNetwork.IsMasterClient)
-        {
-            StartCoroutine("HostFinish");
-        }
-        else
-        {
-            StartCoroutine("GuestFinish");
-        }
+        StartCoroutine("HostFinish");
     }
 
     IEnumerator HostFinish()
@@ -130,9 +127,7 @@ public class FinishHandler : MonoBehaviourPunCallbacks
 
     IEnumerator GuestFinish()
     {
-
-        Debug.Log("Level finish");
-
+        
         bool winner_found = false;
         while (!winner_found)
         {

@@ -101,7 +101,7 @@ public class StartButton : MonoBehaviourPunCallbacks, IOnEventCallback
         {
             all_ready = ReadyCheck();
 
-            Debug.Log("Ready Check: " + all_ready);
+            //Debug.Log("Ready Check: " + all_ready);
 
             for (int _ = 0; _ < 30; _++) { yield return new WaitForFixedUpdate(); }
         }
