@@ -66,7 +66,7 @@ public class ColliderHandler : MonoBehaviour
 
         while (true)
         {
-            
+            /*
             if (first_time[player_num])
             {
                 for (int i = 0; i < Globals.collider_time * 3; i++)
@@ -75,7 +75,7 @@ public class ColliderHandler : MonoBehaviour
                 }
                 first_time[player_num] = false;
             }
-            
+            */
 
             bool failure = false;
             List<Vector3> points = players[player_num].GetComponent<PositionCache>().data;
