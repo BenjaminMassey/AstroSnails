@@ -3335,6 +3335,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e07a395d146cc041b52820be05eb78c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  name_input_obj: {fileID: 1512154365}
   name_input_field_text_obj: {fileID: 33854855}
   password_input_field_obj: {fileID: 631507959}
   size_input_field_text_obj: {fileID: 6379588}

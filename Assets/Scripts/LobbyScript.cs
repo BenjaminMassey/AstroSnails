@@ -24,14 +24,13 @@ public class LobbyScript : MonoBehaviourPunCallbacks
     {
         base.OnRoomListUpdate(roomList);
 
-        //Globals.photon_rooms = roomList;
+        Globals.photon_rooms = roomList;
 
         Debug.Log("See " + roomList.Count + " available rooms");
 
         GameObject content = GameObject.Find("Content");
         float csx = content.GetComponent<RectTransform>().sizeDelta.x;
         content.GetComponent<RectTransform>().sizeDelta = new Vector2(csx, Mathf.Max(600, roomList.Count * 100));
-
         
         GameObject base_button = GameObject.Find("BaseButton");
         base_button.GetComponent<Image>().enabled = true;

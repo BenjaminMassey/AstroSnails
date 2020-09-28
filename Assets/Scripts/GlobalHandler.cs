@@ -103,7 +103,7 @@ public static class Globals
     public static float regen_amount = 0.25f;
     //public static int world_size = 0;
     //public static string room_password = "";
-    //public static List<RoomInfo> photon_rooms;
+    public static List<RoomInfo> photon_rooms = new List<RoomInfo>();
     public static bool wrong_password = false;
     public static Dictionary<string, bool> ready_status = new Dictionary<string, bool>();
 }

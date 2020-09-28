@@ -9,6 +9,8 @@ using System;
 public class RoomCreator : MonoBehaviourPunCallbacks
 {
     [SerializeField]
+    private GameObject name_input_obj;
+    [SerializeField]
     private GameObject name_input_field_text_obj;
     [SerializeField]
     private GameObject password_input_field_obj;
@@ -50,6 +52,22 @@ public class RoomCreator : MonoBehaviourPunCallbacks
         Globals.world_size = worldSize;
         */
 
+        bool already_exists = false;
+        foreach (RoomInfo RI in Globals.photon_rooms)
+        {
+            if (RI.Name.Equals(roomName))
+            {
+                already_exists = true;
+                break;
+            }
+        }
+
+        if (already_exists)
+        {
+            name_input_obj.GetComponent<InputField>().text = "NAME EXISTS";
+            return;
+        }
+
         Debug.Log("Attempting to create room \"" + roomName + "\"");
         transform.GetChild(0).GetComponent<Text>().text = "Creating...";
         roomOps = new RoomOptions()
@@ -73,7 +91,7 @@ public class RoomCreator : MonoBehaviourPunCallbacks
 
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
-        name_input_field_text_obj.GetComponent<Text>().text = "FAILED";
+        name_input_obj.GetComponent<InputField>().text = "FAILED";
         transform.GetChild(0).GetComponent<Text>().text = "Create";
     }
 }
