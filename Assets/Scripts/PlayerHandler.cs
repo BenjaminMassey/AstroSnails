@@ -132,6 +132,8 @@ public class PlayerHandler : MonoBehaviourPun
             }
         }
 
+        //StartCoroutine("TrailBrightness"); see func
+
         StartCoroutine("SetVisual");
     }
 
@@ -423,6 +425,33 @@ public class PlayerHandler : MonoBehaviourPun
 
         boosting = false;
     }
+
+    // DOESN'T ACTUALLY WORK RIGHT: WIP
+    IEnumerator TrailBrightness()
+    {
+        Material m = trail.material;
+        Color c = m.color;
+        float height = player.transform.localPosition.z - player_local_z_start;
+
+        while (true)
+        {
+            if (Globals.running)
+            {
+                height = player.transform.localPosition.z - player_local_z_start;
+
+                c.b = height / jump_amount;
+
+                m.SetColor("_BaseColor", c);
+
+                trail.material = m;
+            }
+            for (int _ = 0; _ < 5; _++)
+            {
+                yield return new WaitForFixedUpdate();
+            }
+        }
+    }
+
 
     public void ResetFly()
     {
