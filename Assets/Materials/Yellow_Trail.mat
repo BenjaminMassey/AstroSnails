@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Orange_Trail
+  m_Name: Yellow_Trail
   m_Shader: {fileID: -6465566751694194690, guid: b1499c154ca511947939cfa29fe26a41,
     type: 3}
   m_ShaderKeywords: 
@@ -21,7 +21,9 @@ Material:
     serializedVersion: 3
     m_TexEnvs: []
     m_Floats:
-    - Vector1_2849A01F: 0.008
+    - Vector1_2849A01F: 0.1
     - Vector1_48AD0518: 5.102
     m_Colors:
-    - Color_130D99F2: {r: 1, g: 0.5019608, b: 0, a: 0}
+    - Color_130D99F2: {r: 1, g: 1, b: 0, a: 0}
+    - Vector3_51552A47: {r: 1, g: 1, b: 1, a: 0}
+    - Vector3_6DD74168: {r: 0, g: 0, b: 0, a: 0}

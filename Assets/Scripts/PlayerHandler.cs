@@ -16,6 +16,9 @@ public class PlayerHandler : MonoBehaviourPun
     private Material[] materials;
 
     [SerializeField]
+    private Material[] trail_materials;
+
+    [SerializeField]
     private AudioSource jump_audio_source;
     [SerializeField]
     private AudioSource fly_audio_source;
@@ -149,7 +152,10 @@ public class PlayerHandler : MonoBehaviourPun
                 {
                     GameObject model = player.transform.Find("ModelContainer").Find("Model").gameObject;
                     model.GetComponent<MeshRenderer>().material = materials[index];
-                    trail.material = materials[index];
+                }
+                if (trail_materials.Length >= 4)
+                {
+                    trail.material = trail_materials[index];
                 }
                 done = true;
             }

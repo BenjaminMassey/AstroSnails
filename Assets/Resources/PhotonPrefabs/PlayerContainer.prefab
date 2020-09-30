@@ -4611,6 +4611,11 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 700992223b302c44b9e2ad80fd76bbc0, type: 2}
   - {fileID: 2100000, guid: abf4a6602a1223d4f95776684aa7cab9, type: 2}
   - {fileID: 2100000, guid: a30967a44e8e69640b1ff7886d55c71b, type: 2}
+  trail_materials:
+  - {fileID: 2100000, guid: cbbb770dba2d6bb4fb3026ff6390f7fe, type: 2}
+  - {fileID: 2100000, guid: 2c19e9091a3bdd44688d28d9c4a76d2b, type: 2}
+  - {fileID: 2100000, guid: 8ade83bcebe206a459b6c432d15553b4, type: 2}
+  - {fileID: 2100000, guid: 7d9b90904f331f9409c5cee7f9abc75e, type: 2}
   jump_audio_source: {fileID: 7917289064770201430}
   fly_audio_source: {fileID: 4143558518808717619}
   boost_audio_source: {fileID: 3528966426766594554}
